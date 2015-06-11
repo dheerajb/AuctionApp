@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Auction App</string>
+
+    <string name="auction_items_list">Auction List</string>
+    <string name="bid_items_list">Bid Items</string>
+    <string name="submit_items">Submit Items</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
+    <string name="action_settings">Settings</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
