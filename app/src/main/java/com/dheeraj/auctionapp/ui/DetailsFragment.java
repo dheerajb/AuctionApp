@@ -7,15 +7,16 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dheeraj.auctionapp.AuctionContract;
 import com.dheeraj.auctionapp.R;
 import com.dheeraj.auctionapp.database.provider.AuctionProvider;
+import com.dheeraj.auctionapp.ui.loader.ImageLoader;
 
 
 /**
@@ -33,7 +34,7 @@ public class DetailsFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private String mItemName;
     private int mIndex;
 
     private OnFragmentInteractionListener mListener;
@@ -42,15 +43,18 @@ public class DetailsFragment extends Fragment {
     private TextView mDescription;
     private TextView mSeller;
     private TextView mPrice;
+    private ImageView mImage;
     private QueryHandler mQueryHandler;
     private static final int TOKEN_GROUP = 0;
 
+    private ImageLoader mImageLoader;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mQueryHandler = new QueryHandler(getActivity().getApplicationContext());
         mQueryHandler.startQuery(TOKEN_GROUP, null, AuctionProvider.CONTENT_URI, null,
-                null, null, null);
+                "_id = ?", new String[] {String.valueOf(mIndex)}, null);
+        mImageLoader = new ImageLoader();
 ;    }
 
     /**
@@ -79,7 +83,7 @@ public class DetailsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            mItemName = getArguments().getString(ARG_PARAM1);
             mIndex = getArguments().getInt(ARG_PARAM2);
         }
     }
@@ -88,12 +92,13 @@ public class DetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View detailView = inflater.inflate(R.layout.fragment_add_auction_item, container, false);
+        View detailView = inflater.inflate(R.layout.fragment_item_details, container, false);
 
         mName = (TextView) detailView.findViewById(R.id.item_description);
         mDescription = (TextView) detailView.findViewById(R.id.item_description_details);
         mSeller = (TextView) detailView.findViewById(R.id.seller_name);
         mPrice = (TextView)detailView.findViewById(R.id.amount);
+        mImage = (ImageView)detailView.findViewById(R.id.image1);
         return detailView;
     }
 
@@ -152,8 +157,8 @@ public class DetailsFragment extends Fragment {
                             mName.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItem.ITEM_NAME)));
                             mDescription.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItem.ITEM_DESCRIPTION)));
                             mSeller.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItem.ITEM_SELLER)));
-                            mPrice.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItem.ITEM__MIN_PRICE)));
-
+                            mPrice.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItem.ITEM_MIN_PRICE)));
+                            mImageLoader.getImageBitmap(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItem.ITEM_IMAGE_PATH)), mImage);
                         }
                     }
                     break;

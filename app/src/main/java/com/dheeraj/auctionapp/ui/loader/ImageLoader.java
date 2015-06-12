@@ -1,21 +1,17 @@
 package com.dheeraj.auctionapp.ui.loader;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.dheeraj.auctionapp.R;
-import com.dheeraj.auctionapp.ui.cache.MemoryCache;
+import com.dheeraj.auctionapp.cache.MemoryCache;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -27,7 +23,7 @@ public class ImageLoader {
     MemoryCache<Bitmap> mMemoryCache = new MemoryCache();
     RequestQueueExecutorService mRequestService = new RequestQueueExecutorService();
     private Map<ImageView, String> mImageMap = new WeakHashMap<>();
-    Handler handler=new Handler(); //Default constructor associates this handler with the Looper for the current thread.
+    Handler handler = new Handler(); //Default constructor associates this handler with the Looper for the current thread.
 
     public void getImageBitmap(String url, ImageView imageView) {
         mImageMap.put(imageView, url);
@@ -40,7 +36,7 @@ public class ImageLoader {
         }
     }
 
-    Bitmap findBitmapByURL(String name) {
+    public static Bitmap findBitmapByURL(String name) {
         /*For this Demo, simply writing a coarse method to load Bitmap from local storage*/
         Bitmap bitmap = null;
         try {
@@ -48,12 +44,10 @@ public class ImageLoader {
             //BitmapFactory.Options options = new BitmapFactory.Options();
             //options.inPreferredConfig = Bitmap.Config.ARGB_8888; // I can optimise it further to use 565
             File newFile = new File(imagePath);
-            Log.e("dheeraj", imagePath);
             //bitmap = BitmapFactory.decodeFile(imagePath, null);
             bitmap = BitmapFactory.decodeStream(new FileInputStream(newFile));
-        }catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
-            Log.e("dheeraj", "error");
         }
         return bitmap;
     }
@@ -81,7 +75,6 @@ public class ImageLoader {
 
     }
 
-    //Used to display bitmap in the UI thread
     class BitmapDisplayer implements Runnable {
         Bitmap bitmap;
         ImageLoadRequestHolder photoToLoad;

@@ -8,21 +8,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.app.FragmentManager;
+import android.widget.Toast;
 
 import com.dheeraj.auctionapp.R;
 
 
 public class AuctionMainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, AuctionListFragment.OnAuctionListFragmentListener,
-        BidListFragment.OnFragmentInteractionListener, SubmitItemsFragment.OnFragmentInteractionListener{
-    @Override
-    public void onAuctionListFragment(int pos) {
-        FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, DetailsFragment.newInstance("testbhai", pos)).addToBackStack(null)
-                        .commit();
-
-    }
+        BidListFragment.OnFragmentInteractionListener, SubmitItemsFragment.OnFragmentInteractionListener, LoginFragment.OnLoginFragmentInteractionListener{
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -34,6 +27,7 @@ public class AuctionMainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
+    private boolean mLoggedIn = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +47,14 @@ public class AuctionMainActivity extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
+        if (mLoggedIn == false) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, new LoginFragment())
+                    .commit();
+            return;
+        }
         switch (position) {
+
             case 0:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new AuctionListFragment())
@@ -113,11 +114,6 @@ public class AuctionMainActivity extends ActionBarActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -129,5 +125,27 @@ public class AuctionMainActivity extends ActionBarActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+    @Override
+    public void onAuctionListFragment(String value, long pos) {
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, DetailsFragment.newInstance("detailsFragment", (int)pos)).addToBackStack(null)
+                .commit();
+
+    }
+
+    @Override
+    public void onLoginFragmentInteraction(boolean status) {
+        mLoggedIn = status;
+        FragmentManager fragmentManager = getFragmentManager();
+        if (status == true) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, new AuctionListFragment())
+                    .commit();
+        } else {
+
+            Toast.makeText(getApplicationContext(),"Please check your login details", Toast.LENGTH_SHORT).show();
+        }
     }
 }

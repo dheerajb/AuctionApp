@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:id="@+id/auction_item_layout"
+    android:orientation="vertical"
+    android:weightSum="1"
+    android:layout_margin="5dp">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:src="@drawable/abc_btn_rating_star_off_mtrl_alpha"
+        android:layout_weight="0.5"
+        android:layout_margin="5dp"
+        android:id="@+id/image1"
+        android:background="@android:color/white"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:orientation="vertical"
+        android:background="@android:color/white">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Item Description:"
+            android:id="@+id/item_description"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:textSize="16sp"
+            android:text="Item Description Details....awesome Product"
+            android:id="@+id/item_description_details"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_weight="0.5"
+                android:text="Seller"
+                android:id="@+id/seller"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_weight="0.5"
+                android:text="Dheeraj"
+                android:id="@+id/seller_name"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_weight="0.5"
+                android:text="Starting Bid"
+                android:id="@+id/min_bid"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_weight="0.5"
+                android:text="Amount"
+                android:textColor="@android:color/holo_red_dark"
+                android:id="@+id/amount"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_weight="0.5"
+                android:text="Current Bid"
+                android:id="@+id/current_bid"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_weight="0.5"
+                android:text="12000"
+                android:textColor="@android:color/holo_green_dark"
+                android:id="@+id/bid"
+                />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

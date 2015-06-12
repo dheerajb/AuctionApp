@@ -123,7 +123,7 @@ public class AuctionListFragment extends Fragment implements AbsListView.OnItemC
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener) {
-            mListener.onAuctionListFragment(position);
+            mListener.onAuctionListFragment("test", id);
         }
     }
 
@@ -170,7 +170,7 @@ public class AuctionListFragment extends Fragment implements AbsListView.OnItemC
      */
     public interface OnAuctionListFragmentListener {
         // TODO: Update argument type and name
-        public void onAuctionListFragment(int pos);
+        public void onAuctionListFragment(String value, long pos);
     }
 
 }

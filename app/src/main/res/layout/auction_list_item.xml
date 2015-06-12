@@ -1,12 +1,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
-    android:padding="6dip" >
+    android:padding="6dip">
 
     <ImageView
         android:id="@+id/item_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="6dip"
@@ -21,8 +21,8 @@
         android:layout_toRightOf="@id/item_icon"
         android:ellipsize="marquee"
         android:singleLine="true"
-        android:textColor="@android:color/black"
         android:text="Description"
+        android:textColor="@android:color/black"
         android:textSize="12sp" />
 
     <TextView
@@ -38,5 +38,22 @@
         android:text="Item Name"
         android:textColor="@android:color/black"
         android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/running_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/secondLine"
+        android:layout_alignParentTop="true"
+        android:text="12000"
+        android:textColor="@android:color/holo_green_dark" />
+
+    <TextView
+        android:id="@+id/current_bid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/running_price"
+        android:text="Currrent Bid : " />
 
 </RelativeLayout> 

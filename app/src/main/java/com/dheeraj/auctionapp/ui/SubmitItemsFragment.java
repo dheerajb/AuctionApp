@@ -1,14 +1,23 @@
 package com.dheeraj.auctionapp.ui;
 
 import android.app.Activity;
+import android.content.AsyncQueryHandler;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.dheeraj.auctionapp.AuctionContract;
 import com.dheeraj.auctionapp.R;
+import com.dheeraj.auctionapp.database.provider.AuctionProvider;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,7 +38,13 @@ public class SubmitItemsFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-
+    private TextView mName;
+    private TextView mDescription;
+    private TextView mSeller;
+    private TextView mPrice;
+    private Button mButton;
+    private QueryHandler mQueryHandler;
+    private static final int TOKEN_GROUP = 0;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -59,13 +74,36 @@ public class SubmitItemsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        mQueryHandler = new QueryHandler(getActivity().getApplicationContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_submit_items, container, false);
+        View detailView = inflater.inflate(R.layout.fragment_submit_items, container, false);
+
+        mName = (TextView) detailView.findViewById(R.id.item_description);
+        mDescription = (TextView) detailView.findViewById(R.id.item_description_details_submit);
+        mSeller = (TextView) detailView.findViewById(R.id.seller_name_submit);
+        mPrice = (TextView)detailView.findViewById(R.id.offer_price);
+        mButton = (Button)detailView.findViewById(R.id.submit);
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /*Insert new enteries to database*/
+                ContentValues cv = new ContentValues();
+                cv.put(AuctionContract.AuctionItem.ITEM_NAME, mName.getText().toString());
+                cv.put(AuctionContract.AuctionItem.ITEM_DESCRIPTION, mDescription.getText().toString());
+                cv.put(AuctionContract.AuctionItem.ITEM_SELLER, mSeller.getText().toString());
+                cv.put(AuctionContract.AuctionItem.ITEM_IMAGE_PATH, "none");
+                cv.put(AuctionContract.AuctionItem.ITEM_MIN_PRICE, mPrice.getText().toString());
+                cv.put(AuctionContract.AuctionItem.ITEM_STATUS, "Available");
+                cv.put(AuctionContract.AuctionItem.ITEM_TIME_SPAN, "24hr");
+                mQueryHandler.startInsert(TOKEN_GROUP,null,AuctionProvider.CONTENT_URI, cv);
+            }
+        });
+        return detailView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -106,5 +144,20 @@ public class SubmitItemsFragment extends Fragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
+    private final class QueryHandler extends AsyncQueryHandler {
 
+        public QueryHandler(Context context) {
+            super(context.getContentResolver());
+        }
+
+        @Override
+        protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
+            switch (token) {
+                case TOKEN_GROUP:
+
+                    break;
+
+            }
+        }
+    }
 }
