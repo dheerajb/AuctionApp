@@ -1,107 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+<LinearLayout
     android:id="@+id/auction_item_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:background="@android:color/white"
     android:orientation="vertical"
-    android:weightSum="1"
-    android:layout_margin="5dp">
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:src="@drawable/abc_btn_rating_star_off_mtrl_alpha"
-        android:layout_weight="0.5"
-        android:layout_margin="5dp"
-        android:id="@+id/image1"
-        android:background="@android:color/white"/>
+    android:padding="16dp"
+    android:weightSum="1">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5"
-        android:orientation="vertical"
-        android:background="@android:color/white">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:text="Item Description:"
-            android:id="@+id/item_description"
-            />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:textSize="16sp"
-            android:text="Item Description Details....awesome Product"
-            android:id="@+id/item_description_details"
-            />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/image1"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:background="@android:color/white"
+            android:src="@drawable/abc_btn_rating_star_off_mtrl_alpha"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+
             <TextView
+                android:id="@+id/item_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="Item Description:"
                 android:textSize="16sp"
-                android:layout_weight="0.5"
-                android:text="Seller"
-                android:id="@+id/seller"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:layout_weight="0.5"
-                android:text="Dheeraj"
-                android:id="@+id/seller_name"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:layout_weight="0.5"
-                android:text="Starting Bid"
-                android:id="@+id/min_bid"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:layout_weight="0.5"
-                android:text="Amount"
-                android:textColor="@android:color/holo_red_dark"
-                android:id="@+id/amount"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:layout_weight="0.5"
-                android:text="Current Bid"
-                android:id="@+id/current_bid"
                 />
 
             <TextView
+                android:id="@+id/item_description_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Item Description Details....awesome Product"
                 android:textSize="16sp"
-                android:layout_weight="0.5"
-                android:text="12000"
-                android:textColor="@android:color/holo_green_dark"
-                android:id="@+id/bid"
                 />
         </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/seller"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Seller"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:id="@+id/seller_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Dheeraj"
+            android:textSize="16sp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/min_bid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Starting Bid"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:id="@+id/amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Amount"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="16sp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/current_bid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Current Bid"
+            android:textSize="16sp"
+            />
+
+        <TextView
+            android:id="@+id/bid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="12000"
+            android:textColor="@android:color/holo_green_dark"
+            android:textSize="16sp"
+            />
     </LinearLayout>
 </LinearLayout>

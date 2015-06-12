@@ -34,15 +34,6 @@ import static com.dheeraj.auctionapp.database.provider.AuctionProvider.CONTENT_U
  */
 public class BidListFragment extends Fragment implements AbsListView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -56,16 +47,6 @@ public class BidListFragment extends Fragment implements AbsListView.OnItemClick
      */
     private AuctionListCursorAdapter mAdapter;
 
-    // TODO: Rename and change types of parameters
-    public static AuctionListFragment newInstance(String param1, String param2) {
-        AuctionListFragment fragment = new AuctionListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -77,12 +58,7 @@ public class BidListFragment extends Fragment implements AbsListView.OnItemClick
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
-        // TODO: Change Adapter to display your content
         getLoaderManager().initLoader(0, null, this);
         mAdapter = new AuctionListCursorAdapter(getActivity().getApplicationContext(), null);
 
@@ -144,7 +120,7 @@ public class BidListFragment extends Fragment implements AbsListView.OnItemClick
 
         CursorLoader cursorLoader;
         String selection = AuctionContract.AuctionItem.ITEM_STATUS + " = " + "won";
-        cursorLoader = new CursorLoader(getActivity().getApplicationContext(),CONTENT_URI, null, AuctionContract.AuctionItem.ITEM_STATUS + " = ?", new String []{"won"}, null);
+        cursorLoader = new CursorLoader(getActivity().getApplicationContext(), CONTENT_URI, null, AuctionContract.AuctionItem.ITEM_STATUS + " = ?", new String[]{"won"}, null);
         return cursorLoader;
     }
 

@@ -1,31 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.dheeraj.auctionapp" >
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+<manifest package="com.dheeraj.auctionapp"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.READ_PROFILE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-
+        android:theme="@style/AppTheme">
         <activity
-            android:name="com.dheeraj.auctionapp.ui.AuctionMainActivity"
-            android:label="@string/app_name"
+            android:name=".ui.AuctionMainActivity"
             android:configChanges="orientation"
+            android:label="@string/app_name"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <provider
-            android:name="com.dheeraj.auctionapp.database.provider.AuctionProvider"
+            android:name=".database.provider.AuctionProvider"
             android:authorities="com.dheeraj.auctionapp.auctionProvider"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true">
         </provider>
+
+        <activity
+            android:name=".ui.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustResize|stateVisible">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

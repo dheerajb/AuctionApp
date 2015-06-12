@@ -1,119 +1,87 @@
 package com.dheeraj.auctionapp.ui;
 
+import android.app.FragmentManager;
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v4.widget.DrawerLayout;
-import android.app.FragmentManager;
-import android.widget.Toast;
 
 import com.dheeraj.auctionapp.R;
 
 
-public class AuctionMainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, AuctionListFragment.OnAuctionListFragmentListener,
-        BidListFragment.OnFragmentInteractionListener, SubmitItemsFragment.OnFragmentInteractionListener, LoginFragment.OnLoginFragmentInteractionListener{
+public class AuctionMainActivity extends AppCompatActivity implements AuctionListFragment.OnAuctionListFragmentListener,
+        BidListFragment.OnFragmentInteractionListener, SubmitItemsFragment.OnFragmentInteractionListener {
 
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    private DrawerLayout mDrawerLayout;
 
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
-    private CharSequence mTitle;
-
-    private boolean mLoggedIn = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auction_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
+        setSupportActionBar(toolbar);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        if (navigationView != null) {
+            setupDrawerContent(navigationView);
+        }
+        addFragment(new AuctionListFragment());
     }
 
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+
+
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        menuItem.setChecked(true);
+                        switch (menuItem.getItemId()) {
+                            case R.id.nav_home:
+                                addFragment(new AuctionListFragment());
+                                break;
+                            case R.id.nav_messages:
+                                addFragment(new BidListFragment());
+                                break;
+                            case R.id.nav_friends:
+                                addFragment(new SubmitItemsFragment());
+                                break;
+
+                        }
+                        mDrawerLayout.closeDrawers();
+                        return true;
+                    }
+                });
+    }
+
+
+    private void addFragment(android.app.Fragment fragment) {
         FragmentManager fragmentManager = getFragmentManager();
-        if (mLoggedIn == false) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, new LoginFragment())
-                    .commit();
-            return;
-        }
-        switch (position) {
-
-            case 0:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, new AuctionListFragment())
-                        .commit();
-                break;
-            case 1:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, new BidListFragment())
-                        .commit();
-                break;
-            case 2:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, new SubmitItemsFragment())
-                        .commit();
-                break;
-        }
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
     }
-
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.auction_items_list);
-                break;
-            case 2:
-                mTitle = getString(R.string.bid_items_list);
-                break;
-            case 3:
-                mTitle = getString(R.string.submit_items);
-                break;
-        }
-    }
-
-    public void restoreActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.auction_main, menu);
-            restoreActionBar();
-            return true;
-        }
         return super.onCreateOptionsMenu(menu);
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -126,26 +94,13 @@ public class AuctionMainActivity extends ActionBarActivity
     public void onFragmentInteraction(Uri uri) {
 
     }
+
     @Override
     public void onAuctionListFragment(String value, long pos) {
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, DetailsFragment.newInstance("detailsFragment", (int)pos)).addToBackStack(null)
+                .replace(R.id.container, DetailsFragment.newInstance("detailsFragment", (int) pos)).addToBackStack(null)
                 .commit();
 
-    }
-
-    @Override
-    public void onLoginFragmentInteraction(boolean status) {
-        mLoggedIn = status;
-        FragmentManager fragmentManager = getFragmentManager();
-        if (status == true) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, new AuctionListFragment())
-                    .commit();
-        } else {
-
-            Toast.makeText(getApplicationContext(),"Please check your login details", Toast.LENGTH_SHORT).show();
-        }
     }
 }
