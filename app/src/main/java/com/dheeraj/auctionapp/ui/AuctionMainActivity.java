@@ -1,6 +1,7 @@
 package com.dheeraj.auctionapp.ui;
 
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -12,12 +13,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dheeraj.auctionapp.R;
+import com.dheeraj.auctionapp.ui.fragments.AuctionListFragment;
+import com.dheeraj.auctionapp.ui.fragments.BidListFragment;
+import com.dheeraj.auctionapp.ui.fragments.DetailsFragment;
+import com.dheeraj.auctionapp.ui.fragments.SubmitItemsFragment;
 
 
 public class AuctionMainActivity extends AppCompatActivity implements AuctionListFragment.OnAuctionListFragmentListener,
         BidListFragment.OnFragmentInteractionListener, SubmitItemsFragment.OnFragmentInteractionListener {
 
     private DrawerLayout mDrawerLayout;
+    private AuctionListFragment mAuctionListFragment;
+    private DetailsFragment mDetailsListFragment;
+    private BidListFragment mBidListFragment;
+    private SubmitItemsFragment mSubmitItemsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,13 +35,21 @@ public class AuctionMainActivity extends AppCompatActivity implements AuctionLis
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_drawer);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
             setupDrawerContent(navigationView);
         }
-        addFragment(new AuctionListFragment());
+        addFragment(mAuctionListFragment = new AuctionListFragment());
+
+        getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+
+            }
+        });
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -45,13 +62,13 @@ public class AuctionMainActivity extends AppCompatActivity implements AuctionLis
                         menuItem.setChecked(true);
                         switch (menuItem.getItemId()) {
                             case R.id.nav_home:
-                                addFragment(new AuctionListFragment());
+                                addFragment(mAuctionListFragment == null ? mAuctionListFragment = new AuctionListFragment() : mAuctionListFragment);
                                 break;
-                            case R.id.nav_messages:
-                                addFragment(new BidListFragment());
+                            case R.id.nav_play:
+                                addFragment(mBidListFragment == null ? mBidListFragment = new BidListFragment() : mBidListFragment);
                                 break;
-                            case R.id.nav_friends:
-                                addFragment(new SubmitItemsFragment());
+                            case R.id.nav_submit:
+                                addFragment(mSubmitItemsFragment == null ? mSubmitItemsFragment = new SubmitItemsFragment() : mSubmitItemsFragment);
                                 break;
 
                         }
@@ -63,10 +80,16 @@ public class AuctionMainActivity extends AppCompatActivity implements AuctionLis
 
 
     private void addFragment(android.app.Fragment fragment) {
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .commit();
+
+        if (!fragment.isVisible()) {
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.popBackStack();
+            fragmentManager.beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .replace(R.id.container, fragment)
+                    .commit();
+        }
+
     }
 
     @Override
@@ -91,15 +114,18 @@ public class AuctionMainActivity extends AppCompatActivity implements AuctionLis
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void onSubmitFragmentInteraction(Uri uri) {
+        addFragment(new AuctionListFragment());
     }
 
     @Override
     public void onAuctionListFragment(String value, long pos) {
+
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, DetailsFragment.newInstance("detailsFragment", (int) pos)).addToBackStack(null)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .replace(R.id.container, DetailsFragment.newInstance("detailsFragment", (int) pos))
+                .addToBackStack(null)
                 .commit();
 
     }

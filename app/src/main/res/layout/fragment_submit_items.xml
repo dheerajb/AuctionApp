@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dheeraj.auctionapp.ui.SubmitItemsFragment">
+    tools:context="com.dheeraj.auctionapp.ui.fragments.SubmitItemsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,14 +10,17 @@
         android:background="@android:color/white"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/item_description"
+        <EditText
+            android:id="@+id/item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
-            android:text="Item Description:"
-            android:textSize="16sp" />
+            android:hint="Item Name"
+            android:textSize="16sp">
+
+            <requestFocus />
+        </EditText>
 
         <EditText
             android:id="@+id/item_description_details_submit"
@@ -27,7 +30,6 @@
             android:hint="Enter your item description"
             android:textSize="16sp">
 
-        <requestFocus />
         </EditText>
 
         <LinearLayout
@@ -70,6 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:hint="Amount"
+                android:numeric="integer"
                 android:textSize="16sp" />
         </LinearLayout>
 

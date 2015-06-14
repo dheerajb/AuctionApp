@@ -1,21 +1,18 @@
-package com.dheeraj.auctionapp;
+package com.dheeraj.auctionapp.database.provider;
 
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
-import android.provider.BaseColumns;
 
-/**
- * Created by DBhati on 09-Jun-15.
- */
 public abstract class AuctionContract {
-    public static class AuctionItem {
+
+    public static class AuctionItemTable {
 
         public static final String TABLE_NAME = "auction_item";
         public static final String RECORD_ID = "_id";
         public static final String ITEM_NAME = "item_name";
         public static final String ITEM_DESCRIPTION = "item_description";
         public static final String ITEM_SELLER = "item_seller";
-        public static final String ITEM_MIN_PRICE = "price";
+        public static final String ITEM_SALE_PRICE = "sale_price";
+        public static final String ITEM_BIDDING_PRICE = "bid_price";
         public static final String ITEM_IMAGE_PATH = "image_path";
         public static final String ITEM_STATUS = "status";
         public static final String ITEM_TIME_SPAN = "time_span";
@@ -26,16 +23,18 @@ public abstract class AuctionContract {
                     + ITEM_NAME + " TEXT, "
                     + ITEM_DESCRIPTION + " TEXT, "
                     + ITEM_SELLER + " TEXT, "
-                    + ITEM_MIN_PRICE + " TEXT, "
+                    + ITEM_SALE_PRICE + " TEXT, "
+                    + ITEM_BIDDING_PRICE + " TEXT, "
                     + ITEM_IMAGE_PATH + " TEXT, "
                     + ITEM_STATUS + " TEXT, "
                     + ITEM_TIME_SPAN + " TEXT "
                     + ");";
             db.execSQL(createTable);
-            createDummyDatabase(db);
+            createDummyAuctionDataBase(db);
         }
 
-        public static void createDummyDatabase(SQLiteDatabase db) {
+
+        public static void createDummyAuctionDataBase(SQLiteDatabase db) {
 
             try {
                 String data = "INSERT INTO " + TABLE_NAME + " VALUES" + " ( "
@@ -44,6 +43,7 @@ public abstract class AuctionContract {
                         + "'The Audi A8 is a four-door, full-size, luxury sedan car manufactured and marketed by the German automaker Audi since 1994', "
                         + "'Audi Studio', "
                         + "'50000', "
+                        + "'0', "
                         + "'Audi.jpg', "
                         + "'active', "
                         + "'48' "
@@ -56,6 +56,7 @@ public abstract class AuctionContract {
                         + "'An awesome car', "
                         + "'Mercedes Studio', "
                         + "'50000', "
+                        + "'0', "
                         + "'Mercedes.jpg', "
                         + "'active', "
                         + "'48' "
@@ -68,6 +69,7 @@ public abstract class AuctionContract {
                         + "'An awesome car', "
                         + "'Toyota Studio', "
                         + "'8000', "
+                        + "'0', "
                         + "'Toyota.jpg', "
                         + "'active', "
                         + "'48' "
@@ -80,6 +82,7 @@ public abstract class AuctionContract {
                         + "'An awesome car', "
                         + "'Audi Studio', "
                         + "'58000', "
+                        + "'0', "
                         + "'Lincoln.jpg', "
                         + "'active', "
                         + "'48' "
@@ -92,6 +95,7 @@ public abstract class AuctionContract {
                         + "'An awesome car', "
                         + "'Honda Studio', "
                         + "'21000', "
+                        + "'0', "
                         + "'Honda.jpg', "
                         + "'active', "
                         + "'48' "
@@ -104,6 +108,7 @@ public abstract class AuctionContract {
                         + "'An awesome car', "
                         + "'Hyundai Studio', "
                         + "'11000', "
+                        + "'0', "
                         + "'Hyundai.jpg', "
                         + "'active', "
                         + "'48' "
@@ -116,6 +121,7 @@ public abstract class AuctionContract {
                         + "'An awesome car', "
                         + "'Suzuki Studio', "
                         + "'5000', "
+                        + "'0', "
                         + "'Suzuki.jpg', "
                         + "'active', "
                         + "'48' "
@@ -128,6 +134,7 @@ public abstract class AuctionContract {
                         + "'An awesome car', "
                         + "'Tata Studio', "
                         + "'5000', "
+                        + "'0', "
                         + "'Tata.jpg', "
                         + "'active', "
                         + "'48' "
@@ -140,6 +147,7 @@ public abstract class AuctionContract {
                         + "'An awesome car', "
                         + "'Acura Studio', "
                         + "'5000', "
+                        + "'0', "
                         + "'Acura.jpg', "
                         + "'won', "
                         + "'48' "
@@ -152,6 +160,7 @@ public abstract class AuctionContract {
                         + "'An awesome car', "
                         + "'Skoda Studio', "
                         + "'15000', "
+                        + "'0', "
                         + "'Skoda.jpg', "
                         + "'bidding', "
                         + "'48' "
@@ -164,5 +173,42 @@ public abstract class AuctionContract {
         }
 
     }
+
+    public static class UserBidTable {
+
+        public static final String TABLE_NAME = "user_table";
+        public static final String RECORD_ID = "_id";
+        public static final String USER_NAME = "user_name";
+        public static final String ITEM_ID = "item_id";
+        public static final String ITEM_STATUS = "item_status";
+
+        public static void createTable(SQLiteDatabase db) {
+            String createTable = "CREATE TABLE " + TABLE_NAME + " ( "
+                    + RECORD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + USER_NAME + " TEXT, "
+                    + ITEM_ID + " TEXT, "
+                    + ITEM_STATUS + " TEXT "
+                    + ");";
+            db.execSQL(createTable);
+        }
+    }
+
+    public static class UserTable {
+
+        public static final String TABLE_NAME = "credentials_table";
+        public static final String RECORD_ID = "_id";
+        public static final String USER_NAME = "user_name";
+        public static final String USER_PASSWORD = "password";
+
+        public static void createTable(SQLiteDatabase db) {
+            String createTable = "CREATE TABLE " + TABLE_NAME + " ( "
+                    + RECORD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + USER_NAME + " TEXT, "
+                    + USER_PASSWORD + " TEXT "
+                    + ");";
+            db.execSQL(createTable);
+        }
+    }
 }
+
 

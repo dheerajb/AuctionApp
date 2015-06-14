@@ -1,7 +1,8 @@
-package com.dheeraj.auctionapp.ui;
+package com.dheeraj.auctionapp.ui.fragments;
 
 import android.app.Activity;
 import android.content.AsyncQueryHandler;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -10,10 +11,12 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.dheeraj.auctionapp.AuctionContract;
+import com.dheeraj.auctionapp.database.provider.AuctionContract;
 import com.dheeraj.auctionapp.R;
 import com.dheeraj.auctionapp.database.provider.AuctionProvider;
 import com.dheeraj.auctionapp.ui.loader.ImageLoader;
@@ -39,23 +42,30 @@ public class DetailsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    private LinearLayout mLn;
     private TextView mName;
     private TextView mDescription;
     private TextView mSeller;
     private TextView mPrice;
+    private TextView mBidPrice;
+    private TextView mCurrentBid;
     private ImageView mImage;
+    private Button mBidButton;
     private QueryHandler mQueryHandler;
-    private static final int TOKEN_GROUP = 0;
+    private static final int TOKEN_QUERY = 0;
+    private static final int TOKEN_INSERT = 1;
 
+    private int mItemID;
     private ImageLoader mImageLoader;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mQueryHandler = new QueryHandler(getActivity().getApplicationContext());
-        mQueryHandler.startQuery(TOKEN_GROUP, null, AuctionProvider.CONTENT_URI, null,
-                "_id = ?", new String[] {String.valueOf(mIndex)}, null);
+        mQueryHandler.startQuery(TOKEN_QUERY, null, AuctionProvider.CONTENT_URI_BIDITEMS, null,
+                "_id = ?", new String[]{String.valueOf(mIndex)}, null);
         mImageLoader = new ImageLoader();
-;    }
+        ;
+    }
 
     /**
      * Use this factory method to create a new instance of
@@ -93,12 +103,24 @@ public class DetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View detailView = inflater.inflate(R.layout.fragment_item_details, container, false);
+        mLn = (LinearLayout)detailView.findViewById(R.id.auction_item_layout);
 
         mName = (TextView) detailView.findViewById(R.id.item_description);
         mDescription = (TextView) detailView.findViewById(R.id.item_description_details);
         mSeller = (TextView) detailView.findViewById(R.id.seller_name);
-        mPrice = (TextView)detailView.findViewById(R.id.amount);
-        mImage = (ImageView)detailView.findViewById(R.id.image1);
+        mPrice = (TextView) detailView.findViewById(R.id.amount);
+        mImage = (ImageView) detailView.findViewById(R.id.image1);
+        mCurrentBid = (TextView) detailView.findViewById(R.id.bid);
+        mBidPrice = (TextView) detailView.findViewById(R.id.new_bid_amount);
+        mBidButton = (Button) detailView.findViewById(R.id.bid_now_button);
+        mBidButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ContentValues cv = new ContentValues();
+                cv.put(AuctionContract.AuctionItemTable.ITEM_BIDDING_PRICE, mBidPrice.getText().toString());
+                mQueryHandler.startUpdate(TOKEN_INSERT, null, AuctionProvider.CONTENT_URI_BIDITEMS, cv, "_id = ?", new String[]{String.valueOf(mItemID)});
+            }
+        });
         return detailView;
     }
 
@@ -148,20 +170,27 @@ public class DetailsFragment extends Fragment {
         }
 
         @Override
+        protected void onUpdateComplete(int token, Object cookie, int result) {
+            super.onUpdateComplete(token, cookie, result);
+        }
+
+        @Override
         protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
+            /*Cursor should not be null. If so we are in bad shape*/
             switch (token) {
-                case TOKEN_GROUP:
-                    if(cursor.getCount() != 0){
+                case TOKEN_QUERY:
+                    if (cursor.getCount() != 0) {
 
                         while (cursor.moveToNext()) {
-                            mName.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItem.ITEM_NAME)));
-                            mDescription.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItem.ITEM_DESCRIPTION)));
-                            mSeller.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItem.ITEM_SELLER)));
-                            mPrice.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItem.ITEM_MIN_PRICE)));
-                            mImageLoader.getImageBitmap(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItem.ITEM_IMAGE_PATH)), mImage);
+                            mItemID = cursor.getInt(cursor.getColumnIndex(AuctionContract.AuctionItemTable.RECORD_ID));
+                            mName.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_NAME)));
+                            mDescription.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_DESCRIPTION)));
+                            mSeller.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_SELLER)));
+                            mPrice.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_SALE_PRICE)));
+                            mImageLoader.getImageBitmap(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_IMAGE_PATH)), mImage);
+                            mCurrentBid.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_BIDDING_PRICE)));
                         }
                     }
-                    break;
 
             }
         }

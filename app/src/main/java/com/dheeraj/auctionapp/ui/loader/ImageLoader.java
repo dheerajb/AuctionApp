@@ -15,9 +15,6 @@ import java.io.FileNotFoundException;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-/**
- * Created by DBhati on 11-Jun-15.
- */
 public class ImageLoader {
 
     MemoryCache<Bitmap> mMemoryCache = new MemoryCache();
@@ -88,7 +85,7 @@ public class ImageLoader {
             if (bitmap != null)
                 photoToLoad.mImageView.setImageBitmap(bitmap);
             else
-                photoToLoad.mImageView.setImageResource(R.drawable.abc_btn_check_to_on_mtrl_015);
+                photoToLoad.mImageView.setImageResource(R.drawable.img_not_found);
         }
     }
 

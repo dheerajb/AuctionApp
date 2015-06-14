@@ -4,9 +4,6 @@ import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by DBhati on 11-Jun-15.
- */
 public class MemoryCache <T>{
     private Map<String, SoftReference<T>> cache = new HashMap<String, SoftReference<T>>();
 

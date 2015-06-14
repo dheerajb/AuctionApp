@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -28,17 +29,21 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.dheeraj.auctionapp.R;
+import com.dheeraj.auctionapp.database.provider.AuctionContract;
+import com.dheeraj.auctionapp.database.provider.AuctionProvider;
 
 /**
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     private static final String PREF_USER_LOGIN_STATUS = "login_status";
+    private static final String PREF_USER_REGISTRATION_STATUS = "registration_status";
     /**
      * A dummy authentication store containing known user names and passwords.
      */
@@ -50,11 +55,13 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
      */
     private UserLoginTask mAuthTask = null;
 
+    private UserRegisterTask mRegisterTask = null;
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    Button registerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,13 +90,25 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button emailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        emailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
             }
         });
+
+        registerButton = (Button) findViewById(R.id.email_register_button);
+        registerButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptRegister();
+            }
+        });
+
+        if (sp.getBoolean(PREF_USER_REGISTRATION_STATUS, false)) {
+            registerButton.setVisibility(View.GONE);
+        }
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
@@ -101,7 +120,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 
     /**
-     * Attempts to sign in or register the account specified by the login form.
+     * Attempts to sign in the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
@@ -152,6 +171,52 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         }
     }
 
+    public void attemptRegister() {
+        if (mAuthTask != null) {
+            return;
+        }
+
+        // Reset errors.
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
+
+        // Store values at the time of the login attempt.
+        String email = mEmailView.getText().toString();
+        String password = mPasswordView.getText().toString();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        // Check for a valid password, if the user entered one.
+        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
+            cancel = true;
+        }
+
+        // Check for a valid email address.
+        if (TextUtils.isEmpty(email)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
+            cancel = true;
+        } else if (!isEmailValid(email)) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailView;
+            cancel = true;
+        }
+
+        if (cancel) {
+            // There was an error; don't attempt login and focus the first
+            // form field with an error.
+            focusView.requestFocus();
+        } else {
+            // Show a progress spinner, and kick off a background task to
+            // perform the user login attempt.
+            showProgress(true);
+            mRegisterTask = new UserRegisterTask(email, password);
+            mRegisterTask.execute((Void) null);
+        }
+    }
     private boolean isEmailValid(String email) {
         return email.contains("@");
     }
@@ -258,22 +323,23 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+            ContentResolver cr = getContentResolver();
+            Cursor c = cr.query(AuctionProvider.CONTENT_URI_CREDENTIALS, null, null, null, null);
+            if (c == null)
                 return false;
-            }
+            String userName = null;
+            String password = null;
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
+            while (c.moveToNext()) {
+                userName = c.getString(c.getColumnIndex(AuctionContract.UserTable.USER_NAME));
+                password = c.getString(c.getColumnIndex(AuctionContract.UserTable.USER_PASSWORD));
+
+                if(TextUtils.equals(userName, mEmailView.getText()) && TextUtils.equals(password, mPasswordView.getText())) {
+                    return true;
                 }
             }
 
-            return true;
+            return false;
         }
 
         @Override
@@ -295,6 +361,54 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         @Override
         protected void onCancelled() {
             mAuthTask = null;
+            showProgress(false);
+        }
+    }
+
+    /**
+     * Represents an asynchronous login/registration task used to authenticate
+     * the user.
+     */
+    public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
+
+        private final String mEmail;
+        private final String mPassword;
+
+        UserRegisterTask(String email, String password) {
+            mEmail = email;
+            mPassword = password;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+
+            ContentResolver cr = getContentResolver();
+            ContentValues cp = new ContentValues();
+            cp.put(AuctionContract.UserTable.USER_NAME, mEmailView.getText().toString());
+            cp.put(AuctionContract.UserTable.USER_PASSWORD, mPasswordView.getText().toString());
+            cr.insert(AuctionProvider.CONTENT_URI_CREDENTIALS, cp);
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            mAuthTask = null;
+            showProgress(false);
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+            if (success) {
+
+                sp.edit().putBoolean(PREF_USER_LOGIN_STATUS,success).apply();
+                registerButton.setVisibility(View.GONE);
+                Toast.makeText(getApplicationContext(), "Registration Success", Toast.LENGTH_SHORT).show();
+            } else {
+                sp.edit().putBoolean(PREF_USER_REGISTRATION_STATUS,success).apply();
+                Toast.makeText(getApplicationContext(),"Registration Failed", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mRegisterTask = null;
             showProgress(false);
         }
     }

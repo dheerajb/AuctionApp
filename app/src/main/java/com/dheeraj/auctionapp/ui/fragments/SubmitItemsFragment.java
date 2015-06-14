@@ -1,10 +1,9 @@
-package com.dheeraj.auctionapp.ui;
+package com.dheeraj.auctionapp.ui.fragments;
 
 import android.app.Activity;
 import android.content.AsyncQueryHandler;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -12,10 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.dheeraj.auctionapp.AuctionContract;
+import com.dheeraj.auctionapp.database.provider.AuctionContract;
 import com.dheeraj.auctionapp.R;
 import com.dheeraj.auctionapp.database.provider.AuctionProvider;
 
@@ -44,7 +42,7 @@ public class SubmitItemsFragment extends Fragment {
     private TextView mPrice;
     private Button mButton;
     private QueryHandler mQueryHandler;
-    private static final int TOKEN_GROUP = 0;
+    private static final int TOKEN_INSERT = 0;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -83,7 +81,7 @@ public class SubmitItemsFragment extends Fragment {
         // Inflate the layout for this fragment
         View detailView = inflater.inflate(R.layout.fragment_submit_items, container, false);
 
-        mName = (TextView) detailView.findViewById(R.id.item_description);
+        mName = (TextView) detailView.findViewById(R.id.item_name);
         mDescription = (TextView) detailView.findViewById(R.id.item_description_details_submit);
         mSeller = (TextView) detailView.findViewById(R.id.seller_name_submit);
         mPrice = (TextView)detailView.findViewById(R.id.offer_price);
@@ -93,14 +91,14 @@ public class SubmitItemsFragment extends Fragment {
             public void onClick(View view) {
                 /*Insert new enteries to database*/
                 ContentValues cv = new ContentValues();
-                cv.put(AuctionContract.AuctionItem.ITEM_NAME, mName.getText().toString());
-                cv.put(AuctionContract.AuctionItem.ITEM_DESCRIPTION, mDescription.getText().toString());
-                cv.put(AuctionContract.AuctionItem.ITEM_SELLER, mSeller.getText().toString());
-                cv.put(AuctionContract.AuctionItem.ITEM_IMAGE_PATH, "none");
-                cv.put(AuctionContract.AuctionItem.ITEM_MIN_PRICE, mPrice.getText().toString());
-                cv.put(AuctionContract.AuctionItem.ITEM_STATUS, "Available");
-                cv.put(AuctionContract.AuctionItem.ITEM_TIME_SPAN, "24hr");
-                mQueryHandler.startInsert(TOKEN_GROUP,null,AuctionProvider.CONTENT_URI, cv);
+                cv.put(AuctionContract.AuctionItemTable.ITEM_NAME, mName.getText().toString());
+                cv.put(AuctionContract.AuctionItemTable.ITEM_DESCRIPTION, mDescription.getText().toString());
+                cv.put(AuctionContract.AuctionItemTable.ITEM_SELLER, mSeller.getText().toString());
+                cv.put(AuctionContract.AuctionItemTable.ITEM_IMAGE_PATH, "none");
+                cv.put(AuctionContract.AuctionItemTable.ITEM_SALE_PRICE, mPrice.getText().toString());
+                cv.put(AuctionContract.AuctionItemTable.ITEM_STATUS, "Available");
+                cv.put(AuctionContract.AuctionItemTable.ITEM_TIME_SPAN, "24hr");
+                mQueryHandler.startInsert(TOKEN_INSERT,null,AuctionProvider.CONTENT_URI_BIDITEMS, cv);
             }
         });
         return detailView;
@@ -109,7 +107,7 @@ public class SubmitItemsFragment extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onSubmitFragmentInteraction(uri);
         }
     }
 
@@ -142,7 +140,7 @@ public class SubmitItemsFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+        public void onSubmitFragmentInteraction(Uri uri);
     }
     private final class QueryHandler extends AsyncQueryHandler {
 
@@ -151,10 +149,13 @@ public class SubmitItemsFragment extends Fragment {
         }
 
         @Override
-        protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
+        protected void onInsertComplete(int token, Object cookie, Uri uri) {
+            super.onInsertComplete(token, cookie, uri);
             switch (token) {
-                case TOKEN_GROUP:
-
+                case TOKEN_INSERT:
+                    if (mListener != null) {
+                        mListener.onSubmitFragmentInteraction(uri);
+                    }
                     break;
 
             }

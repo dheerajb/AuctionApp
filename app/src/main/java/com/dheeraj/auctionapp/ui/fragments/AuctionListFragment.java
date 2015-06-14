@@ -1,4 +1,4 @@
-package com.dheeraj.auctionapp.ui;
+package com.dheeraj.auctionapp.ui.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -16,9 +16,11 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.dheeraj.auctionapp.R;
+import com.dheeraj.auctionapp.database.provider.AuctionContract;
+import com.dheeraj.auctionapp.database.provider.AuctionProvider;
 import com.dheeraj.auctionapp.ui.adapter.AuctionListCursorAdapter;
 
-import static com.dheeraj.auctionapp.database.provider.AuctionProvider.CONTENT_URI;
+import static com.dheeraj.auctionapp.database.provider.AuctionProvider.CONTENT_URI_BIDITEMS;
 
 /**
  * A fragment representing a list of Items.
@@ -120,7 +122,7 @@ public class AuctionListFragment extends Fragment implements AbsListView.OnItemC
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
 
         CursorLoader cursorLoader;
-        cursorLoader = new CursorLoader(getActivity().getApplicationContext(),CONTENT_URI, null, null, null, null);
+        cursorLoader = new CursorLoader(getActivity().getApplicationContext(), CONTENT_URI_BIDITEMS, null, AuctionContract.AuctionItemTable.ITEM_STATUS + "= ?", new String[] {"active"}, null);
         return cursorLoader;
     }
 

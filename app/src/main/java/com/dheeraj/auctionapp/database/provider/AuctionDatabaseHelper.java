@@ -5,11 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.dheeraj.auctionapp.AuctionContract;
-
-/**
- * Created by DBhati on 09-Jun-15.
- */
 public class AuctionDatabaseHelper extends SQLiteOpenHelper
 {
     public static final int DATABASE_VERSION = 1;
@@ -26,7 +21,8 @@ public class AuctionDatabaseHelper extends SQLiteOpenHelper
             if (true) {
 
                 /*Constructing a dummy Auctions db which we will use for our App*/
-                AuctionContract.AuctionItem.createTable(sqLiteDatabase);
+                AuctionContract.AuctionItemTable.createTable(sqLiteDatabase);
+                AuctionContract.UserTable.createTable(sqLiteDatabase);
 
             }
         }catch(Exception e){

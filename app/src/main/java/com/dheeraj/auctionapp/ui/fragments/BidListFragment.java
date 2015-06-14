@@ -1,4 +1,4 @@
-package com.dheeraj.auctionapp.ui;
+package com.dheeraj.auctionapp.ui.fragments;
 
 import android.app.Activity;
 import android.app.LoaderManager;
@@ -13,15 +13,17 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 
-import com.dheeraj.auctionapp.AuctionContract;
+import com.dheeraj.auctionapp.database.provider.AuctionContract;
 import com.dheeraj.auctionapp.R;
 import com.dheeraj.auctionapp.ui.adapter.AuctionListCursorAdapter;
+import com.dheeraj.auctionapp.ui.adapter.BidListCursorAdapter;
 
-import static com.dheeraj.auctionapp.database.provider.AuctionProvider.CONTENT_URI;
+import org.w3c.dom.Text;
+
+import static com.dheeraj.auctionapp.database.provider.AuctionProvider.CONTENT_URI_BIDITEMS;
 
 /**
  * A fragment representing a list of Items.
@@ -45,7 +47,8 @@ public class BidListFragment extends Fragment implements AbsListView.OnItemClick
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private AuctionListCursorAdapter mAdapter;
+    private BidListCursorAdapter mAdapter;
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -60,7 +63,7 @@ public class BidListFragment extends Fragment implements AbsListView.OnItemClick
 
 
         getLoaderManager().initLoader(0, null, this);
-        mAdapter = new AuctionListCursorAdapter(getActivity().getApplicationContext(), null);
+        mAdapter = new BidListCursorAdapter(getActivity().getApplicationContext(), null);
 
     }
 
@@ -75,7 +78,6 @@ public class BidListFragment extends Fragment implements AbsListView.OnItemClick
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
-
         return view;
     }
 
@@ -119,8 +121,7 @@ public class BidListFragment extends Fragment implements AbsListView.OnItemClick
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
 
         CursorLoader cursorLoader;
-        String selection = AuctionContract.AuctionItem.ITEM_STATUS + " = " + "won";
-        cursorLoader = new CursorLoader(getActivity().getApplicationContext(), CONTENT_URI, null, AuctionContract.AuctionItem.ITEM_STATUS + " = ?", new String[]{"won"}, null);
+        cursorLoader = new CursorLoader(getActivity().getApplicationContext(), CONTENT_URI_BIDITEMS, null, AuctionContract.AuctionItemTable.ITEM_STATUS + " != ?", new String[]{"active"}, null);
         return cursorLoader;
     }
 

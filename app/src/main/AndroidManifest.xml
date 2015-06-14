@@ -31,7 +31,6 @@
 
         <activity
             android:name=".ui.LoginActivity"
-            android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
