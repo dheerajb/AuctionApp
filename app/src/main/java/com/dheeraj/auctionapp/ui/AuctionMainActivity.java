@@ -9,24 +9,27 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dheeraj.auctionapp.R;
 import com.dheeraj.auctionapp.ui.fragments.AuctionListFragment;
+import com.dheeraj.auctionapp.ui.fragments.AutoBotListFragment;
 import com.dheeraj.auctionapp.ui.fragments.BidListFragment;
 import com.dheeraj.auctionapp.ui.fragments.DetailsFragment;
 import com.dheeraj.auctionapp.ui.fragments.SubmitItemsFragment;
 
 
 public class AuctionMainActivity extends AppCompatActivity implements AuctionListFragment.OnAuctionListFragmentListener,
-        BidListFragment.OnFragmentInteractionListener, SubmitItemsFragment.OnFragmentInteractionListener {
+        BidListFragment.OnFragmentInteractionListener, SubmitItemsFragment.OnFragmentInteractionListener, AutoBotListFragment.OnAutobotListFragmentListener {
 
     private DrawerLayout mDrawerLayout;
     private AuctionListFragment mAuctionListFragment;
     private DetailsFragment mDetailsListFragment;
     private BidListFragment mBidListFragment;
     private SubmitItemsFragment mSubmitItemsFragment;
+    private AutoBotListFragment mAutoBotListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +50,7 @@ public class AuctionMainActivity extends AppCompatActivity implements AuctionLis
         getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
-
+                Log.d("Dheeraj", "l");
             }
         });
     }
@@ -69,6 +72,9 @@ public class AuctionMainActivity extends AppCompatActivity implements AuctionLis
                                 break;
                             case R.id.nav_submit:
                                 addFragment(mSubmitItemsFragment == null ? mSubmitItemsFragment = new SubmitItemsFragment() : mSubmitItemsFragment);
+                                break;
+                            case R.id.nav_robo:
+                                addFragment(mAutoBotListFragment == null ? mAutoBotListFragment = new AutoBotListFragment() : mAutoBotListFragment);
                                 break;
 
                         }
@@ -125,8 +131,13 @@ public class AuctionMainActivity extends AppCompatActivity implements AuctionLis
         fragmentManager.beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .replace(R.id.container, DetailsFragment.newInstance("detailsFragment", (int) pos))
-                .addToBackStack(null)
                 .commit();
 
     }
+
+    @Override
+    public void onAutoBotListFragment(String value, long pos) {
+
+    }
+
 }

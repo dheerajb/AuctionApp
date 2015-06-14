@@ -15,7 +15,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.dheeraj.auctionapp.database.provider.AuctionConstants;
 import com.dheeraj.auctionapp.database.provider.AuctionContract;
 import com.dheeraj.auctionapp.R;
 import com.dheeraj.auctionapp.database.provider.AuctionProvider;
@@ -118,7 +120,9 @@ public class DetailsFragment extends Fragment {
             public void onClick(View view) {
                 ContentValues cv = new ContentValues();
                 cv.put(AuctionContract.AuctionItemTable.ITEM_BIDDING_PRICE, mBidPrice.getText().toString());
+                cv.put(AuctionContract.AuctionItemTable.ITEM_STATUS, AuctionConstants.ITEM_STATE_BID);
                 mQueryHandler.startUpdate(TOKEN_INSERT, null, AuctionProvider.CONTENT_URI_BIDITEMS, cv, "_id = ?", new String[]{String.valueOf(mItemID)});
+                Toast.makeText(getActivity().getApplicationContext(), "New Bid Submitted", Toast.LENGTH_LONG).show();
             }
         });
         return detailView;
@@ -182,7 +186,7 @@ public class DetailsFragment extends Fragment {
                     if (cursor.getCount() != 0) {
 
                         while (cursor.moveToNext()) {
-                            mItemID = cursor.getInt(cursor.getColumnIndex(AuctionContract.AuctionItemTable.RECORD_ID));
+                            mItemID = cursor.getInt(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_ID));
                             mName.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_NAME)));
                             mDescription.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_DESCRIPTION)));
                             mSeller.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_SELLER)));

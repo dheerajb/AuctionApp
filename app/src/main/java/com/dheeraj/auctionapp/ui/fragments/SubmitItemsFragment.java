@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.dheeraj.auctionapp.database.provider.AuctionConstants;
 import com.dheeraj.auctionapp.database.provider.AuctionContract;
 import com.dheeraj.auctionapp.R;
 import com.dheeraj.auctionapp.database.provider.AuctionProvider;
@@ -96,7 +97,7 @@ public class SubmitItemsFragment extends Fragment {
                 cv.put(AuctionContract.AuctionItemTable.ITEM_SELLER, mSeller.getText().toString());
                 cv.put(AuctionContract.AuctionItemTable.ITEM_IMAGE_PATH, "none");
                 cv.put(AuctionContract.AuctionItemTable.ITEM_SALE_PRICE, mPrice.getText().toString());
-                cv.put(AuctionContract.AuctionItemTable.ITEM_STATUS, "Available");
+                cv.put(AuctionContract.AuctionItemTable.ITEM_STATUS, AuctionConstants.ITEM_STATE_ACTIVE);
                 cv.put(AuctionContract.AuctionItemTable.ITEM_TIME_SPAN, "24hr");
                 mQueryHandler.startInsert(TOKEN_INSERT,null,AuctionProvider.CONTENT_URI_BIDITEMS, cv);
             }

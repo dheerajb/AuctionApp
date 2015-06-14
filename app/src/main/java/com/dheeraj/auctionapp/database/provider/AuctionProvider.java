@@ -1,9 +1,11 @@
 package com.dheeraj.auctionapp.database.provider;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
@@ -90,7 +92,7 @@ public class AuctionProvider extends ContentProvider {
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection,
+    public synchronized int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
         String tableName = null;
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -113,19 +115,20 @@ public class AuctionProvider extends ContentProvider {
                 values,
                 selection,
                 selectionArgs);
+        getContext().getContentResolver().notifyChange(uri, null);
         return rowsUpdated;
 
     }
 
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
+    public synchronized Uri insert(Uri uri, ContentValues values) {
         SQLiteDatabase sqlDB = dbHelper.getWritableDatabase();
         String tableName = null;
 
         Uri returnURI = null;
         int match = 0;
         try {
-            match = findMatch(uri, "update");
+            match = findMatch(uri, "insert");
         } catch (IllegalArgumentException e) {
 
         }
@@ -140,10 +143,13 @@ public class AuctionProvider extends ContentProvider {
                 tableName = AuctionContract.UserTable.TABLE_NAME;
                 break;
         }
-        long id = sqlDB.insert(tableName, null, values);
-        getContext().getContentResolver().notifyChange(uri, null);
-
-        return null;
+        long rowId = sqlDB.insert(tableName, null, values);
+        if (rowId > 0) {
+            Uri insURI = ContentUris.withAppendedId(uri, rowId);
+            getContext().getContentResolver().notifyChange(insURI, null);
+            return insURI;
+        }
+        throw new SQLException("Failed to insert row into " + uri);
     }
 
 
@@ -153,6 +159,7 @@ public class AuctionProvider extends ContentProvider {
 
         int rowsDeleted = sqlDB.delete(AuctionContract.AuctionItemTable.TABLE_NAME, selection,
                 selectionArgs);
+        getContext().getContentResolver().notifyChange(uri, null);
         return rowsDeleted;
     }
 

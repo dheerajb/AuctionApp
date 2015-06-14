@@ -7,7 +7,7 @@ public abstract class AuctionContract {
     public static class AuctionItemTable {
 
         public static final String TABLE_NAME = "auction_item";
-        public static final String RECORD_ID = "_id";
+        public static final String ITEM_ID = "_id";
         public static final String ITEM_NAME = "item_name";
         public static final String ITEM_DESCRIPTION = "item_description";
         public static final String ITEM_SELLER = "item_seller";
@@ -19,7 +19,7 @@ public abstract class AuctionContract {
 
         public static void createTable(SQLiteDatabase db) {
             String createTable = "CREATE TABLE " + TABLE_NAME + " ( "
-                    + RECORD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                     + ITEM_NAME + " TEXT, "
                     + ITEM_DESCRIPTION + " TEXT, "
                     + ITEM_SELLER + " TEXT, "
@@ -147,7 +147,7 @@ public abstract class AuctionContract {
                         + "'An awesome car', "
                         + "'Acura Studio', "
                         + "'5000', "
-                        + "'0', "
+                        + "'6000', "
                         + "'Acura.jpg', "
                         + "'won', "
                         + "'48' "
@@ -162,7 +162,7 @@ public abstract class AuctionContract {
                         + "'15000', "
                         + "'0', "
                         + "'Skoda.jpg', "
-                        + "'bidding', "
+                        + "'active', "
                         + "'48' "
                         + ");";
                 db.execSQL(data);
