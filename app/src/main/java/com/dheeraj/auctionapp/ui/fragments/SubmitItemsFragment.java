@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.dheeraj.auctionapp.database.provider.AuctionConstants;
+import com.dheeraj.auctionapp.AuctionConstants;
 import com.dheeraj.auctionapp.database.provider.AuctionContract;
 import com.dheeraj.auctionapp.R;
 import com.dheeraj.auctionapp.database.provider.AuctionProvider;

@@ -101,6 +101,7 @@ public class BidListFragment extends Fragment implements AbsListView.OnItemClick
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (null != mListener) {
+            mListener.onFragmentInteraction("test", id);
         }
     }
 
@@ -146,8 +147,7 @@ public class BidListFragment extends Fragment implements AbsListView.OnItemClick
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(String id);
+        public void onFragmentInteraction(String value, long id);
     }
 
 }

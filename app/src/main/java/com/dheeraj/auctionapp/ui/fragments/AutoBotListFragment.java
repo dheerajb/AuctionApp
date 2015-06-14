@@ -8,8 +8,10 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.dheeraj.auctionapp.R;
+import com.dheeraj.auctionapp.AuctionConstants;
 import com.dheeraj.auctionapp.database.provider.AuctionContract;
 import com.dheeraj.auctionapp.reciever.AutobotBroadcastReceiver;
 import com.dheeraj.auctionapp.ui.adapter.AutoBotListCursorAdapter;
@@ -73,7 +76,7 @@ public class AutoBotListFragment extends Fragment implements AbsListView.OnItemC
         bidButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setAutoBid(mAdapter.getSelectedItems());
+                setAutoBid(mAdapter.getSelectedItems(), mAdapter.getSelectedItemsPrice());
 
             }
         });
@@ -116,7 +119,7 @@ public class AutoBotListFragment extends Fragment implements AbsListView.OnItemC
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
 
         CursorLoader cursorLoader;
-        cursorLoader = new CursorLoader(getActivity().getApplicationContext(), CONTENT_URI_BIDITEMS, null, AuctionContract.AuctionItemTable.ITEM_STATUS + "= ?", new String[]{"active"}, null);
+        cursorLoader = new CursorLoader(getActivity().getApplicationContext(), CONTENT_URI_BIDITEMS, null, AuctionContract.AuctionItemTable.ITEM_STATUS + "!= ?", new String[]{AuctionConstants.ITEM_STATE_WON}, null);
         return cursorLoader;
     }
 
@@ -144,13 +147,16 @@ public class AutoBotListFragment extends Fragment implements AbsListView.OnItemC
         public void onAutoBotListFragment(String value, long pos);
     }
 
-    private void setAutoBid(ArrayList<Integer> list) {
-        ArrayList<String> inc = new ArrayList<>();
-        inc.add(mBidValueEditText.getText().toString());
+    private void setAutoBid(ArrayList<Integer> list, ArrayList<Integer> price) {
+
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        sp.edit().putInt(AuctionConstants.PREF_AUTBOT_INCREMENT, Integer.parseInt(mBidValueEditText.getText().toString())).apply();
+
         Intent intent = new Intent(mContext, AutobotBroadcastReceiver.class);
 
         intent.putIntegerArrayListExtra(AutobotBroadcastReceiver.AUTO_POLL_LIST, list);
-        intent.putStringArrayListExtra(AutobotBroadcastReceiver.AUTO_BID_INCREMENT, inc);
+        intent.putIntegerArrayListExtra(AutobotBroadcastReceiver.AUTO_BID_INCREMENT, price);
         AutobotBroadcastReceiver.scheduleAlarms(mContext, intent);
     }
 }

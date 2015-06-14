@@ -2,18 +2,17 @@ package com.dheeraj.auctionapp.reciever;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+import android.content.SharedPreferences;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.v4.content.WakefulBroadcastReceiver;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.dheeraj.auctionapp.database.provider.AuctionConstants;
+import com.dheeraj.auctionapp.AuctionConstants;
 import com.dheeraj.auctionapp.database.provider.AuctionContract;
 import com.dheeraj.auctionapp.database.provider.AuctionProvider;
 
@@ -30,17 +29,27 @@ public class AutobotBroadcastReceiver extends WakefulBroadcastReceiver {
 
     @Override
     public void onReceive(Context ctxt, Intent intent) {
+
         if (intent.getAction() == null) {
 
             ArrayList<Integer> selectedIdList = intent.getIntegerArrayListExtra(AUTO_POLL_LIST);
-            ArrayList<String> incrementValue = intent.getStringArrayListExtra(AUTO_BID_INCREMENT);
+            ArrayList<Integer> price = intent.getIntegerArrayListExtra(AUTO_BID_INCREMENT);
+
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctxt);
+            int increment = sp.getInt(AuctionConstants.PREF_AUTBOT_INCREMENT, 0);
+            int count  = 0;
+            ArrayList<Integer> inc = new ArrayList<>();
+            for (Integer itemPrice : price) {
+                inc.add(increment + price.get(count++));
+            }
+
             int index = 0;
                 /*Lets set bids on these items*/
             for (int value : selectedIdList) {
                 /*Will later move this to IntentService. as I am running out of time right now*/
                 ContentResolver cr = ctxt.getContentResolver();
                 ContentValues cp = new ContentValues();
-                cp.put(AuctionContract.AuctionItemTable.ITEM_BIDDING_PRICE, String.valueOf(incrementValue.get(0)));
+                cp.put(AuctionContract.AuctionItemTable.ITEM_BIDDING_PRICE, inc.get(index));
                 cp.put(AuctionContract.AuctionItemTable.ITEM_STATUS, AuctionConstants.ITEM_STATE_BID);
                 cr.update(AuctionProvider.CONTENT_URI_BIDITEMS, cp, "_id = ?", new String[]{String.valueOf(selectedIdList.get(index++))});
             }
@@ -48,6 +57,7 @@ public class AutobotBroadcastReceiver extends WakefulBroadcastReceiver {
     }
 
     public static void scheduleAlarms(Context ctxt , Intent intent) {
+
         cancelAlarms(ctxt, intent);
 
         AlarmManager mgr=

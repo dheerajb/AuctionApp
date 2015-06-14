@@ -136,7 +136,6 @@ public class AuctionListFragment extends Fragment implements AbsListView.OnItemC
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnAuctionListFragmentListener {
-        // TODO: Update argument type and name
         public void onAuctionListFragment(String value, long pos);
     }
 

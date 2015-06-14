@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dheeraj.auctionapp.database.provider.AuctionConstants;
+import com.dheeraj.auctionapp.AuctionConstants;
 import com.dheeraj.auctionapp.database.provider.AuctionContract;
 import com.dheeraj.auctionapp.R;
 import com.dheeraj.auctionapp.database.provider.AuctionProvider;
@@ -118,6 +118,7 @@ public class DetailsFragment extends Fragment {
         mBidButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mCurrentBid.setText(mBidPrice.getText());
                 ContentValues cv = new ContentValues();
                 cv.put(AuctionContract.AuctionItemTable.ITEM_BIDDING_PRICE, mBidPrice.getText().toString());
                 cv.put(AuctionContract.AuctionItemTable.ITEM_STATUS, AuctionConstants.ITEM_STATE_BID);

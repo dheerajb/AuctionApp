@@ -115,11 +115,6 @@ public class AuctionMainActivity extends AppCompatActivity implements AuctionLis
     }
 
     @Override
-    public void onFragmentInteraction(String id) {
-
-    }
-
-    @Override
     public void onSubmitFragmentInteraction(Uri uri) {
         addFragment(new AuctionListFragment());
     }
@@ -140,4 +135,12 @@ public class AuctionMainActivity extends AppCompatActivity implements AuctionLis
 
     }
 
+    @Override
+    public void onFragmentInteraction(String value, long id) {
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .replace(R.id.container, DetailsFragment.newInstance("detailsFragment", (int) id))
+                .commit();
+    }
 }
