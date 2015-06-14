@@ -90,13 +90,14 @@ public class SubmitItemsFragment extends Fragment {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Insert new enteries to database*/
+
                 ContentValues cv = new ContentValues();
                 cv.put(AuctionContract.AuctionItemTable.ITEM_NAME, mName.getText().toString());
                 cv.put(AuctionContract.AuctionItemTable.ITEM_DESCRIPTION, mDescription.getText().toString());
                 cv.put(AuctionContract.AuctionItemTable.ITEM_SELLER, mSeller.getText().toString());
                 cv.put(AuctionContract.AuctionItemTable.ITEM_IMAGE_PATH, "none");
                 cv.put(AuctionContract.AuctionItemTable.ITEM_SALE_PRICE, mPrice.getText().toString());
+                cv.put(AuctionContract.AuctionItemTable.ITEM_RUNNING_BID_PRICE, mPrice.getText().toString());
                 cv.put(AuctionContract.AuctionItemTable.ITEM_STATUS, AuctionConstants.ITEM_STATE_ACTIVE);
                 cv.put(AuctionContract.AuctionItemTable.ITEM_TIME_SPAN, "24hr");
                 mQueryHandler.startInsert(TOKEN_INSERT,null,AuctionProvider.CONTENT_URI_BIDITEMS, cv);

@@ -52,7 +52,7 @@ public class AutoBotListCursorAdapter extends CursorAdapter {
         String priority = cursor.getString(cursor.getColumnIndexOrThrow(AuctionContract.AuctionItemTable.ITEM_DESCRIPTION));
         name.setText(body);
         description.setText(priority);
-        final String itemBidPrice = cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_BIDDING_PRICE));
+        final String itemBidPrice = cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_RUNNING_BID_PRICE));
         currentBid.setText(itemBidPrice);
         mImageLoader.getImageBitmap(cursor.getString(cursor.getColumnIndexOrThrow(AuctionContract.AuctionItemTable.ITEM_IMAGE_PATH)), imageView);
         checkBox.setOnClickListener(new View.OnClickListener() {

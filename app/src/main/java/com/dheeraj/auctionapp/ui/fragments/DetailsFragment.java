@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,17 +49,19 @@ public class DetailsFragment extends Fragment {
     private TextView mName;
     private TextView mDescription;
     private TextView mSeller;
-    private TextView mPrice;
-    private TextView mBidPrice;
-    private TextView mCurrentBid;
+    private TextView mSalePrice;
+    private TextView mNewBidPrice;
+    private TextView mRunningBidPrice;
     private ImageView mImage;
     private Button mBidButton;
+    private Button mCancelButton;
     private QueryHandler mQueryHandler;
     private static final int TOKEN_QUERY = 0;
     private static final int TOKEN_INSERT = 1;
 
     private int mItemID;
     private ImageLoader mImageLoader;
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -105,22 +108,39 @@ public class DetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View detailView = inflater.inflate(R.layout.fragment_item_details, container, false);
-        mLn = (LinearLayout)detailView.findViewById(R.id.auction_item_layout);
+        mLn = (LinearLayout) detailView.findViewById(R.id.auction_item_layout);
 
+        mImage = (ImageView) detailView.findViewById(R.id.image1);
         mName = (TextView) detailView.findViewById(R.id.item_description);
         mDescription = (TextView) detailView.findViewById(R.id.item_description_details);
         mSeller = (TextView) detailView.findViewById(R.id.seller_name);
-        mPrice = (TextView) detailView.findViewById(R.id.amount);
-        mImage = (ImageView) detailView.findViewById(R.id.image1);
-        mCurrentBid = (TextView) detailView.findViewById(R.id.bid);
-        mBidPrice = (TextView) detailView.findViewById(R.id.new_bid_amount);
+        mSalePrice = (TextView) detailView.findViewById(R.id.sale_price);
+        mRunningBidPrice = (TextView) detailView.findViewById(R.id.running_bid);
+
+        mNewBidPrice = (TextView) detailView.findViewById(R.id.new_bid_amount);
+        mCancelButton = (Button) detailView.findViewById(R.id.cancel_button);
+        mCancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ContentValues cv = new ContentValues();
+                cv.put(AuctionContract.AuctionItemTable.ITEM_STATUS, AuctionConstants.ITEM_STATE_ACTIVE);
+                mQueryHandler.startUpdate(TOKEN_INSERT, null, AuctionProvider.CONTENT_URI_BIDITEMS, cv, "_id = ?", new String[]{String.valueOf(mItemID)});
+                Toast.makeText(getActivity().getApplicationContext(), "You have withdrawn from bid", Toast.LENGTH_LONG).show();
+            }
+        });
         mBidButton = (Button) detailView.findViewById(R.id.bid_now_button);
         mBidButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCurrentBid.setText(mBidPrice.getText());
+
+                if (Integer.parseInt(mNewBidPrice.getText().toString()) < Integer.parseInt(mRunningBidPrice.getText().toString())) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Please bid more than running bid", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                mRunningBidPrice.setText(mNewBidPrice.getText());
                 ContentValues cv = new ContentValues();
-                cv.put(AuctionContract.AuctionItemTable.ITEM_BIDDING_PRICE, mBidPrice.getText().toString());
+                cv.put(AuctionContract.AuctionItemTable.ITEM_RUNNING_BID_PRICE, mNewBidPrice.getText().toString());
                 cv.put(AuctionContract.AuctionItemTable.ITEM_STATUS, AuctionConstants.ITEM_STATE_BID);
                 mQueryHandler.startUpdate(TOKEN_INSERT, null, AuctionProvider.CONTENT_URI_BIDITEMS, cv, "_id = ?", new String[]{String.valueOf(mItemID)});
                 Toast.makeText(getActivity().getApplicationContext(), "New Bid Submitted", Toast.LENGTH_LONG).show();
@@ -143,7 +163,7 @@ public class DetailsFragment extends Fragment {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             //throw new ClassCastException(activity.toString()
-             //       + " must implement OnFragmentInteractionListener");
+            //       + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -191,9 +211,14 @@ public class DetailsFragment extends Fragment {
                             mName.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_NAME)));
                             mDescription.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_DESCRIPTION)));
                             mSeller.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_SELLER)));
-                            mPrice.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_SALE_PRICE)));
+                            mSalePrice.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_SALE_PRICE)));
                             mImageLoader.getImageBitmap(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_IMAGE_PATH)), mImage);
-                            mCurrentBid.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_BIDDING_PRICE)));
+                            mRunningBidPrice.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_RUNNING_BID_PRICE)));
+
+                            String status = cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_STATUS));
+                            if(TextUtils.equals(status, AuctionConstants.ITEM_STATE_BID)) {
+                                mCancelButton.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
 

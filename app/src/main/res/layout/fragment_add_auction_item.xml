@@ -71,7 +71,7 @@
                 android:textSize="16sp"
                 android:layout_weight="0.5"
                 android:text="Amount"
-                android:id="@+id/amount"
+                android:id="@+id/sale_price"
                 />
         </LinearLayout>
         <LinearLayout

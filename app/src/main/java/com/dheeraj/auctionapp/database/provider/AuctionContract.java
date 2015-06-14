@@ -12,7 +12,7 @@ public abstract class AuctionContract {
         public static final String ITEM_DESCRIPTION = "item_description";
         public static final String ITEM_SELLER = "item_seller";
         public static final String ITEM_SALE_PRICE = "sale_price";
-        public static final String ITEM_BIDDING_PRICE = "bid_price";
+        public static final String ITEM_RUNNING_BID_PRICE = "bid_price";
         public static final String ITEM_IMAGE_PATH = "image_path";
         public static final String ITEM_STATUS = "status";
         public static final String ITEM_TIME_SPAN = "time_span";
@@ -24,7 +24,7 @@ public abstract class AuctionContract {
                     + ITEM_DESCRIPTION + " TEXT, "
                     + ITEM_SELLER + " TEXT, "
                     + ITEM_SALE_PRICE + " TEXT, "
-                    + ITEM_BIDDING_PRICE + " TEXT, "
+                    + ITEM_RUNNING_BID_PRICE + " TEXT, "
                     + ITEM_IMAGE_PATH + " TEXT, "
                     + ITEM_STATUS + " TEXT, "
                     + ITEM_TIME_SPAN + " TEXT "

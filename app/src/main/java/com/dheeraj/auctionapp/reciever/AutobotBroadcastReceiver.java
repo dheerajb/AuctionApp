@@ -49,7 +49,7 @@ public class AutobotBroadcastReceiver extends WakefulBroadcastReceiver {
                 /*Will later move this to IntentService. as I am running out of time right now*/
                 ContentResolver cr = ctxt.getContentResolver();
                 ContentValues cp = new ContentValues();
-                cp.put(AuctionContract.AuctionItemTable.ITEM_BIDDING_PRICE, inc.get(index));
+                cp.put(AuctionContract.AuctionItemTable.ITEM_RUNNING_BID_PRICE, inc.get(index));
                 cp.put(AuctionContract.AuctionItemTable.ITEM_STATUS, AuctionConstants.ITEM_STATE_BID);
                 cr.update(AuctionProvider.CONTENT_URI_BIDITEMS, cp, "_id = ?", new String[]{String.valueOf(selectedIdList.get(index++))});
             }

@@ -47,7 +47,7 @@ public class BidListCursorAdapter extends CursorAdapter {
         String item_description = cursor.getString(cursor.getColumnIndexOrThrow(AuctionContract.AuctionItemTable.ITEM_DESCRIPTION));
         name.setText(body);
         description.setText(item_description);
-        running_price.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_BIDDING_PRICE)));
+        running_price.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_RUNNING_BID_PRICE)));
         mImageLoader.getImageBitmap(cursor.getString(cursor.getColumnIndexOrThrow(AuctionContract.AuctionItemTable.ITEM_IMAGE_PATH)), imageView);
     }
 }

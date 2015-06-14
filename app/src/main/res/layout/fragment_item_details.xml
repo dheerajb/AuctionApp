@@ -35,16 +35,24 @@
                     android:id="@+id/new_bid_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.6"
+                    android:layout_weight="0.4"
                     android:hint="Enter Bid Amount"
+                    android:maxLength="10"
                     android:numeric="integer" />
 
                 <Button
                     android:id="@+id/bid_now_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.4"
                     android:text="Bid Now" />
+                />
+
+                <Button
+                    android:id="@+id/cancel_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cancel"
+                    android:visibility="gone" />
                 />
             </LinearLayout>
 
@@ -107,11 +115,10 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/amount"
+                android:id="@+id/sale_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:text="Amount"
                 android:textColor="@android:color/holo_red_dark"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -130,7 +137,7 @@
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/bid"
+                android:id="@+id/running_bid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
