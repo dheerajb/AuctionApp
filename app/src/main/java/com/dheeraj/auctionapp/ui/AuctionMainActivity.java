@@ -2,6 +2,7 @@ package com.dheeraj.auctionapp.ui;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -39,6 +40,8 @@ public class AuctionMainActivity extends AppCompatActivity implements AuctionLis
 
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_drawer);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -121,12 +124,11 @@ public class AuctionMainActivity extends AppCompatActivity implements AuctionLis
 
     @Override
     public void onAuctionListFragment(String value, long pos) {
-
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(R.id.container, DetailsFragment.newInstance("detailsFragment", (int) pos))
-                .commit();
+        Bundle args = new Bundle();
+        args.putString(DetailsFragment.ARG_PARAM1, value);
+        args.putLong(DetailsFragment.ARG_PARAM2, pos);
+        Intent intent =  new Intent(this,DetailActivity.class);
+        startActivity(intent);
 
     }
 
@@ -137,10 +139,8 @@ public class AuctionMainActivity extends AppCompatActivity implements AuctionLis
 
     @Override
     public void onFragmentInteraction(String value, long id) {
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(R.id.container, DetailsFragment.newInstance("detailsFragment", (int) id))
-                .commit();
+
+        onAuctionListFragment(value,id);
+
     }
 }
