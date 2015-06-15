@@ -64,8 +64,8 @@ public class AutoBotListCursorAdapter extends CursorAdapter {
                     mIDList.add(holder.id);
                     mPriceList.add(holder.price);
                 } else {
-                    mIDList.remove(holder.id);
-                    mPriceList.add(holder.price);
+                    /*mIDList.remove(holder.id);
+                    mPriceList.add(holder.price);*/
                 }
             }
         });

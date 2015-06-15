@@ -272,7 +272,11 @@ public class LoginActivity extends Activity {
                 return false;
             String userName = null;
             String password = null;
-
+            try {
+                Thread.sleep(2000); //dummy wait to show progress bar
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             while (c.moveToNext()) {
                 userName = c.getString(c.getColumnIndex(AuctionContract.UserTable.USER_NAME));
                 password = c.getString(c.getColumnIndex(AuctionContract.UserTable.USER_PASSWORD));
@@ -324,6 +328,12 @@ public class LoginActivity extends Activity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
+
+            try {
+                Thread.sleep(2000); //dummy wait to show progress bar
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             ContentResolver cr = getContentResolver();
             ContentValues cp = new ContentValues();

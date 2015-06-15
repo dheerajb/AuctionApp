@@ -24,7 +24,7 @@ public class AutobotBroadcastReceiver extends WakefulBroadcastReceiver {
     public static final String AUTO_POLL_LIST = "auto_poll_list";
     public static final String AUTO_BID_INCREMENT= "bid_increment";
 
-    private static final int PERIOD = 30000; //900000; // 15 minutes
+    private static final int PERIOD = 30000*2; // 1 Minute
     private static final int INITIAL_DELAY = 5000; // 5 seconds
 
     @Override
@@ -53,17 +53,23 @@ public class AutobotBroadcastReceiver extends WakefulBroadcastReceiver {
                 cp.put(AuctionContract.AuctionItemTable.ITEM_STATUS, AuctionConstants.ITEM_STATE_BID);
                 cr.update(AuctionProvider.CONTENT_URI_BIDITEMS, cp, "_id = ?", new String[]{String.valueOf(selectedIdList.get(index++))});
             }
+            cancelAlarms(ctxt, intent);
+
+            Intent newIntent = new Intent(ctxt, AutobotBroadcastReceiver.class);
+            newIntent.putIntegerArrayListExtra(AutobotBroadcastReceiver.AUTO_POLL_LIST, selectedIdList);
+            newIntent.putIntegerArrayListExtra(AutobotBroadcastReceiver.AUTO_BID_INCREMENT, inc);
+            scheduleAlarms(ctxt, newIntent);
         }
     }
 
     public static void scheduleAlarms(Context ctxt , Intent intent) {
 
-        cancelAlarms(ctxt, intent);
+        //cancelAlarms(ctxt, intent);
 
         AlarmManager mgr=
                 (AlarmManager)ctxt.getSystemService(Context.ALARM_SERVICE);
 
-        PendingIntent pi = PendingIntent.getBroadcast(ctxt, 0, intent, 0);
+        PendingIntent pi = PendingIntent.getBroadcast(ctxt, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 SystemClock.elapsedRealtime() + INITIAL_DELAY,
@@ -77,7 +83,7 @@ public class AutobotBroadcastReceiver extends WakefulBroadcastReceiver {
         AlarmManager mgr=
                 (AlarmManager)ctxt.getSystemService(Context.ALARM_SERVICE);
 
-        PendingIntent pi = PendingIntent.getBroadcast(ctxt, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pi = PendingIntent.getBroadcast(ctxt, 0, intent, PendingIntent.FLAG_NO_CREATE);
         mgr.cancel(pi);
 
     }
