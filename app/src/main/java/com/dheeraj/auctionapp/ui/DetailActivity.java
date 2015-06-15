@@ -27,7 +27,7 @@ public class DetailActivity extends AppCompatActivity {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        Bundle bundle = getIntent().getExtras();
+        Bundle bundle = getIntent().getExtras().getBundle("details");
         Fragment fragment = new DetailsFragment();
 
         fragment.setArguments(bundle);

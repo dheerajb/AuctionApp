@@ -127,7 +127,8 @@ public class AuctionMainActivity extends AppCompatActivity implements AuctionLis
         Bundle args = new Bundle();
         args.putString(DetailsFragment.ARG_PARAM1, value);
         args.putLong(DetailsFragment.ARG_PARAM2, pos);
-        Intent intent =  new Intent(this,DetailActivity.class);
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra("details", args);
         startActivity(intent);
 
     }
@@ -140,7 +141,7 @@ public class AuctionMainActivity extends AppCompatActivity implements AuctionLis
     @Override
     public void onFragmentInteraction(String value, long id) {
 
-        onAuctionListFragment(value,id);
+        onAuctionListFragment(value, id);
 
     }
 }
