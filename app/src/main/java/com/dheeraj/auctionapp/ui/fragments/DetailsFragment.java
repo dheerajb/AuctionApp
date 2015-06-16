@@ -50,9 +50,8 @@ public class DetailsFragment extends Fragment {
     private TextView mSalePrice;
     private TextView mNewBidPrice;
     private TextView mRunningBidPrice;
-    private ImageView mImage;
-    private Button mBidButton;
-    private Button mCancelButton;
+   /* private Button mBidButton;
+    private Button mCancelButton;*/
     private QueryHandler mQueryHandler;
     private static final int TOKEN_QUERY = 0;
     private static final int TOKEN_INSERT = 1;
@@ -108,15 +107,13 @@ public class DetailsFragment extends Fragment {
         View detailView = inflater.inflate(R.layout.fragment_item_details, container, false);
         mLn = (LinearLayout) detailView.findViewById(R.id.auction_item_layout);
 
-        mImage = (ImageView) detailView.findViewById(R.id.image1);
         mName = (TextView) detailView.findViewById(R.id.item_description);
         mDescription = (TextView) detailView.findViewById(R.id.item_description_details);
         mSeller = (TextView) detailView.findViewById(R.id.seller_name);
         mSalePrice = (TextView) detailView.findViewById(R.id.sale_price);
         mRunningBidPrice = (TextView) detailView.findViewById(R.id.running_bid);
 
-        mNewBidPrice = (TextView) detailView.findViewById(R.id.new_bid_amount);
-        mCancelButton = (Button) detailView.findViewById(R.id.cancel_button);
+       /*
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,16 +140,10 @@ public class DetailsFragment extends Fragment {
                 mQueryHandler.startUpdate(TOKEN_INSERT, null, AuctionProvider.CONTENT_URI_BIDITEMS, cv, "_id = ?", new String[]{String.valueOf(mItemID)});
                 Toast.makeText(getActivity().getApplicationContext(), "New Bid Submitted", Toast.LENGTH_LONG).show();
             }
-        });
+        });*/
         return detailView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -160,8 +151,7 @@ public class DetailsFragment extends Fragment {
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
-            //throw new ClassCastException(activity.toString()
-            //       + " must implement OnFragmentInteractionListener");
+
         }
     }
 
@@ -182,8 +172,7 @@ public class DetailsFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+        public void onFragmentInteraction(String uri);
     }
 
     private final class QueryHandler extends AsyncQueryHandler {
@@ -210,13 +199,14 @@ public class DetailsFragment extends Fragment {
                             mDescription.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_DESCRIPTION)));
                             mSeller.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_SELLER)));
                             mSalePrice.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_SALE_PRICE)));
-                            mImageLoader.getImageBitmap(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_IMAGE_PATH)), mImage);
                             mRunningBidPrice.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_RUNNING_BID_PRICE)));
 
                             String status = cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_STATUS));
-                            if(TextUtils.equals(status, AuctionConstants.ITEM_STATE_BID)) {
+                          /*  if (TextUtils.equals(status, AuctionConstants.ITEM_STATE_BID)) {
                                 mCancelButton.setVisibility(View.VISIBLE);
-                            }
+                            }*/
+                            String url = cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_IMAGE_PATH));
+                            mListener.onFragmentInteraction(url);
                         }
                     }
 

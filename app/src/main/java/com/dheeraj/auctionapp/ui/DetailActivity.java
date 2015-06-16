@@ -8,11 +8,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.dheeraj.auctionapp.Cars;
 import com.dheeraj.auctionapp.R;
 import com.dheeraj.auctionapp.ui.fragments.DetailsFragment;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements DetailsFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,7 @@ public class DetailActivity extends AppCompatActivity {
                 .add(R.id.detail_fragment, fragment).commit();
     }
 
+
   /*  @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detail, menu);
@@ -52,5 +56,11 @@ public class DetailActivity extends AppCompatActivity {
                 return true;
         }*/
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFragmentInteraction(String uri) {
+        final ImageView imageView = (ImageView) findViewById(R.id.backdrop);
+        Glide.with(this).load(uri).centerCrop().into(imageView);
     }
 }

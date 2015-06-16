@@ -2,6 +2,8 @@ package com.dheeraj.auctionapp.database.provider;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import com.dheeraj.auctionapp.Cars;
+
 public abstract class AuctionContract {
 
     public static class AuctionItemTable {
@@ -40,11 +42,21 @@ public abstract class AuctionContract {
                 String data = "INSERT INTO " + TABLE_NAME + " VALUES" + " ( "
                         + "'1', "
                         + "'Audi A8', "
-                        + "'The Audi A8 is a four-door, full-size, luxury sedan car manufactured and marketed by the German automaker Audi since 1994', "
+                        + "'Exterior Looks amazing.\n" +
+                        "\n" +
+                        "Interior (Features, Space & Comfort) Excellent comfort with amazing features.\n" +
+                        "\n" +
+                        "Engine Performance, Fuel Economy and Gearbox Fuel economy is great, but engine performance could have been better.\n" +
+                        "\n" +
+                        "Ride Quality & Handling Very good.\n" +
+                        "\n" +
+                        "Final Words I would definetely recomend this car for my friends; Especially, the features and drive comfort it offers for the price.\n" +
+                        "\n" +
+                        "Areas of improvement Having said that, it does not match the service quality or spare parts quality of HONDA or TOYOTA.', "
                         + "'Audi Studio', "
                         + "'1200', "
                         + "'1200', "
-                        + "'Audi.jpg', "
+                        + "'" + Cars.urls[0] + "', "
                         + "'active', "
                         + "'48' "
                         + ");";
@@ -53,11 +65,21 @@ public abstract class AuctionContract {
                 data = "INSERT INTO " + TABLE_NAME + " VALUES" + " ( "
                         + "'2', "
                         + "'Mercedes' , "
-                        + "'An awesome car', "
+                        + "'Exterior Looks amazing.\n" +
+                        "\n" +
+                        "Interior (Features, Space & Comfort) Excellent comfort with amazing features.\n" +
+                        "\n" +
+                        "Engine Performance, Fuel Economy and Gearbox Fuel economy is great, but engine performance could have been better.\n" +
+                        "\n" +
+                        "Ride Quality & Handling Very good.\n" +
+                        "\n" +
+                        "Final Words I would definetely recomend this car for my friends; Especially, the features and drive comfort it offers for the price.\n" +
+                        "\n" +
+                        "Areas of improvement Having said that, it does not match the service quality or spare parts quality of HONDA or TOYOTA.', "
                         + "'Mercedes Studio', "
                         + "'1600', "
                         + "'1600', "
-                        + "'Mercedes.jpg', "
+                        + "'" + Cars.urls[1] + "', "
                         + "'active', "
                         + "'48' "
                         + ");";
@@ -66,11 +88,21 @@ public abstract class AuctionContract {
                 data = "INSERT INTO " + TABLE_NAME + " VALUES" + " ( "
                         + "'3', "
                         + "'Toyota Liva', "
-                        + "'An awesome car', "
+                        + "'Exterior Looks amazing.\n" +
+                        "\n" +
+                        "Interior (Features, Space & Comfort) Excellent comfort with amazing features.\n" +
+                        "\n" +
+                        "Engine Performance, Fuel Economy and Gearbox Fuel economy is great, but engine performance could have been better.\n" +
+                        "\n" +
+                        "Ride Quality & Handling Very good.\n" +
+                        "\n" +
+                        "Final Words I would definetely recomend this car for my friends; Especially, the features and drive comfort it offers for the price.\n" +
+                        "\n" +
+                        "Areas of improvement Having said that, it does not match the service quality or spare parts quality of HONDA or TOYOTA.', "
                         + "'Toyota Studio', "
                         + "'1300', "
                         + "'1300', "
-                        + "'Toyota.jpg', "
+                        + "'" + Cars.urls[2] + "', "
                         + "'active', "
                         + "'48' "
                         + ");";
@@ -79,11 +111,21 @@ public abstract class AuctionContract {
                 data = "INSERT INTO " + TABLE_NAME + " VALUES" + " ( "
                         + "'4', "
                         + "'Lincoln', "
-                        + "'An awesome car', "
+                        + "'Exterior Looks amazing.\n" +
+                        "\n" +
+                        "Interior (Features, Space & Comfort) Excellent comfort with amazing features.\n" +
+                        "\n" +
+                        "Engine Performance, Fuel Economy and Gearbox Fuel economy is great, but engine performance could have been better.\n" +
+                        "\n" +
+                        "Ride Quality & Handling Very good.\n" +
+                        "\n" +
+                        "Final Words I would definetely recomend this car for my friends; Especially, the features and drive comfort it offers for the price.\n" +
+                        "\n" +
+                        "Areas of improvement Having said that, it does not match the service quality or spare parts quality of HONDA or TOYOTA.', "
                         + "'Audi Studio', "
                         + "'1100', "
                         + "'1100', "
-                        + "'Lincoln.jpg', "
+                        + "'" + Cars.urls[3] + "', "
                         + "'active', "
                         + "'48' "
                         + ");";
@@ -92,11 +134,21 @@ public abstract class AuctionContract {
                 data = "INSERT INTO " + TABLE_NAME + " VALUES" + " ( "
                         + "'5', "
                         + "'Honda City', "
-                        + "'An awesome car', "
+                        + "'Exterior Looks amazing.\n" +
+                        "\n" +
+                        "Interior (Features, Space & Comfort) Excellent comfort with amazing features.\n" +
+                        "\n" +
+                        "Engine Performance, Fuel Economy and Gearbox Fuel economy is great, but engine performance could have been better.\n" +
+                        "\n" +
+                        "Ride Quality & Handling Very good.\n" +
+                        "\n" +
+                        "Final Words I would definetely recomend this car for my friends; Especially, the features and drive comfort it offers for the price.\n" +
+                        "\n" +
+                        "Areas of improvement Having said that, it does not match the service quality or spare parts quality of HONDA or TOYOTA.', "
                         + "'Honda Studio', "
                         + "'900', "
                         + "'900', "
-                        + "'Honda.jpg', "
+                        + "'" + Cars.urls[4] + "', "
                         + "'active', "
                         + "'48' "
                         + ");";
@@ -105,11 +157,21 @@ public abstract class AuctionContract {
                 data = "INSERT INTO " + TABLE_NAME + " VALUES" + " ( "
                         + "'6', "
                         + "'Hyundai i10', "
-                        + "'An awesome car', "
+                        + "'Exterior Looks amazing.\n" +
+                        "\n" +
+                        "Interior (Features, Space & Comfort) Excellent comfort with amazing features.\n" +
+                        "\n" +
+                        "Engine Performance, Fuel Economy and Gearbox Fuel economy is great, but engine performance could have been better.\n" +
+                        "\n" +
+                        "Ride Quality & Handling Very good.\n" +
+                        "\n" +
+                        "Final Words I would definetely recomend this car for my friends; Especially, the features and drive comfort it offers for the price.\n" +
+                        "\n" +
+                        "Areas of improvement Having said that, it does not match the service quality or spare parts quality of HONDA or TOYOTA.', "
                         + "'Hyundai Studio', "
                         + "'850', "
                         + "'850', "
-                        + "'Hyundai.jpg', "
+                        + "'" + Cars.urls[5] + "', "
                         + "'active', "
                         + "'48' "
                         + ");";
@@ -118,11 +180,21 @@ public abstract class AuctionContract {
                 data = "INSERT INTO " + TABLE_NAME + " VALUES" + " ( "
                         + "'7', "
                         + "'Suzuki', "
-                        + "'An awesome car', "
+                        + "'Exterior Looks amazing.\n" +
+                        "\n" +
+                        "Interior (Features, Space & Comfort) Excellent comfort with amazing features.\n" +
+                        "\n" +
+                        "Engine Performance, Fuel Economy and Gearbox Fuel economy is great, but engine performance could have been better.\n" +
+                        "\n" +
+                        "Ride Quality & Handling Very good.\n" +
+                        "\n" +
+                        "Final Words I would definetely recomend this car for my friends; Especially, the features and drive comfort it offers for the price.\n" +
+                        "\n" +
+                        "Areas of improvement Having said that, it does not match the service quality or spare parts quality of HONDA or TOYOTA.', "
                         + "'Suzuki Studio', "
                         + "'990', "
                         + "'990', "
-                        + "'Suzuki.jpg', "
+                        + "'" + Cars.urls[6] + "', "
                         + "'active', "
                         + "'48' "
                         + ");";
@@ -131,11 +203,21 @@ public abstract class AuctionContract {
                 data = "INSERT INTO " + TABLE_NAME + " VALUES" + " ( "
                         + "'8', "
                         + "'Tata Zest', "
-                        + "'An awesome car', "
+                        + "'Exterior Looks amazing.\n" +
+                        "\n" +
+                        "Interior (Features, Space & Comfort) Excellent comfort with amazing features.\n" +
+                        "\n" +
+                        "Engine Performance, Fuel Economy and Gearbox Fuel economy is great, but engine performance could have been better.\n" +
+                        "\n" +
+                        "Ride Quality & Handling Very good.\n" +
+                        "\n" +
+                        "Final Words I would definetely recomend this car for my friends; Especially, the features and drive comfort it offers for the price.\n" +
+                        "\n" +
+                        "Areas of improvement Having said that, it does not match the service quality or spare parts quality of HONDA or TOYOTA.', "
                         + "'Tata Studio', "
                         + "'800', "
                         + "'800', "
-                        + "'Tata.jpg', "
+                        + "'" + Cars.urls[7] + "', "
                         + "'active', "
                         + "'48' "
                         + ");";
@@ -144,11 +226,21 @@ public abstract class AuctionContract {
                 data = "INSERT INTO " + TABLE_NAME + " VALUES" + " ( "
                         + "'9', "
                         + "'Acura', "
-                        + "'An awesome car', "
+                        + "'Exterior Looks amazing.\n" +
+                        "\n" +
+                        "Interior (Features, Space & Comfort) Excellent comfort with amazing features.\n" +
+                        "\n" +
+                        "Engine Performance, Fuel Economy and Gearbox Fuel economy is great, but engine performance could have been better.\n" +
+                        "\n" +
+                        "Ride Quality & Handling Very good.\n" +
+                        "\n" +
+                        "Final Words I would definetely recomend this car for my friends; Especially, the features and drive comfort it offers for the price.\n" +
+                        "\n" +
+                        "Areas of improvement Having said that, it does not match the service quality or spare parts quality of HONDA or TOYOTA.', "
                         + "'Acura Studio', "
                         + "'1600', "
                         + "'2000', "
-                        + "'Acura.jpg', "
+                        + "'" + Cars.urls[8] + "', "
                         + "'won', "
                         + "'48' "
                         + ");";
@@ -157,11 +249,21 @@ public abstract class AuctionContract {
                 data = "INSERT INTO " + TABLE_NAME + " VALUES" + " ( "
                         + "'10', "
                         + "'Skoda Ocatvia', "
-                        + "'An awesome car', "
+                        + "'Exterior Looks amazing.\n" +
+                        "\n" +
+                        "Interior (Features, Space & Comfort) Excellent comfort with amazing features.\n" +
+                        "\n" +
+                        "Engine Performance, Fuel Economy and Gearbox Fuel economy is great, but engine performance could have been better.\n" +
+                        "\n" +
+                        "Ride Quality & Handling Very good.\n" +
+                        "\n" +
+                        "Final Words I would definetely recomend this car for my friends; Especially, the features and drive comfort it offers for the price.\n" +
+                        "\n" +
+                        "Areas of improvement Having said that, it does not match the service quality or spare parts quality of HONDA or TOYOTA.', "
                         + "'Skoda Studio', "
                         + "'1270', "
                         + "'1270', "
-                        + "'Skoda.jpg', "
+                        + "'" + Cars.urls[9] + "', "
                         + "'active', "
                         + "'48' "
                         + ");";
