@@ -10,6 +10,7 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.dheeraj.auctionapp.R;
 import com.dheeraj.auctionapp.database.provider.AuctionContract;
 import com.dheeraj.auctionapp.ui.loader.ImageLoader;
@@ -17,7 +18,6 @@ import com.dheeraj.auctionapp.ui.loader.ImageLoader;
 import java.util.ArrayList;
 
 public class AutoBotListCursorAdapter extends CursorAdapter {
-    public ImageLoader mImageLoader;
     ArrayList<Integer> mIDList = new ArrayList<>();
     ArrayList<Integer> mPriceList = new ArrayList<>();
 
@@ -31,7 +31,6 @@ public class AutoBotListCursorAdapter extends CursorAdapter {
 
     public AutoBotListCursorAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
-        mImageLoader = new ImageLoader();
     }
 
     @Override
@@ -54,7 +53,6 @@ public class AutoBotListCursorAdapter extends CursorAdapter {
         description.setText(priority);
         final String itemBidPrice = cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_RUNNING_BID_PRICE));
         currentBid.setText(itemBidPrice);
-        mImageLoader.getImageBitmap(cursor.getString(cursor.getColumnIndexOrThrow(AuctionContract.AuctionItemTable.ITEM_IMAGE_PATH)), imageView);
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,6 +80,8 @@ public class AutoBotListCursorAdapter extends CursorAdapter {
         holder.price = Integer.parseInt(itemBidPrice);
         checkBox.setTag(holder);
         //checkBox.setTag(Integer.parseInt(cursor.getString(cursor.getColumnIndexOrThrow(AuctionContract.AuctionItemTable.ITEM_ID))));
+        String url = cursor.getString(cursor.getColumnIndexOrThrow(AuctionContract.AuctionItemTable.ITEM_IMAGE_PATH));
+        Glide.with(context).load(url).centerCrop().into(imageView);
     }
 
     /*I know this is crude way. I should have used a parcelable Object*/

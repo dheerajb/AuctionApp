@@ -10,16 +10,15 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.dheeraj.auctionapp.R;
 import com.dheeraj.auctionapp.database.provider.AuctionContract;
 import com.dheeraj.auctionapp.ui.loader.ImageLoader;
 
 public class BidListCursorAdapter extends CursorAdapter {
-    public ImageLoader mImageLoader;
 
     public BidListCursorAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
-        mImageLoader = new ImageLoader();
     }
 
     // The newView method is used to inflate a new view and return it,
@@ -48,6 +47,7 @@ public class BidListCursorAdapter extends CursorAdapter {
         name.setText(body);
         description.setText(item_description);
         running_price.setText(cursor.getString(cursor.getColumnIndex(AuctionContract.AuctionItemTable.ITEM_RUNNING_BID_PRICE)));
-        mImageLoader.getImageBitmap(cursor.getString(cursor.getColumnIndexOrThrow(AuctionContract.AuctionItemTable.ITEM_IMAGE_PATH)), imageView);
+        String url = cursor.getString(cursor.getColumnIndexOrThrow(AuctionContract.AuctionItemTable.ITEM_IMAGE_PATH));
+        Glide.with(context).load(url).centerCrop().into(imageView);
     }
 }
