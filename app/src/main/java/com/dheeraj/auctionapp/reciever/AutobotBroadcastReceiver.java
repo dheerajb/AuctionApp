@@ -22,9 +22,9 @@ import java.util.ArrayList;
 
 public class AutobotBroadcastReceiver extends WakefulBroadcastReceiver {
     public static final String AUTO_POLL_LIST = "auto_poll_list";
-    public static final String AUTO_BID_INCREMENT= "bid_increment";
+    public static final String AUTO_BID_INCREMENT = "bid_increment";
 
-    private static final int PERIOD = 30000*2; // 1 Minute
+    private static final int PERIOD = 30000; // 1 Minute
     private static final int INITIAL_DELAY = 5000; // 5 seconds
 
     @Override
@@ -37,7 +37,7 @@ public class AutobotBroadcastReceiver extends WakefulBroadcastReceiver {
 
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(ctxt);
             int increment = sp.getInt(AuctionConstants.PREF_AUTBOT_INCREMENT, 0);
-            int count  = 0;
+            int count = 0;
             ArrayList<Integer> inc = new ArrayList<>();
             for (Integer itemPrice : price) {
                 inc.add(increment + price.get(count++));
@@ -53,7 +53,7 @@ public class AutobotBroadcastReceiver extends WakefulBroadcastReceiver {
                 cp.put(AuctionContract.AuctionItemTable.ITEM_STATUS, AuctionConstants.ITEM_STATE_BID);
                 cr.update(AuctionProvider.CONTENT_URI_BIDITEMS, cp, "_id = ?", new String[]{String.valueOf(selectedIdList.get(index++))});
             }
-            cancelAlarms(ctxt, intent);
+            //cancelAlarms(ctxt, intent);
 
             Intent newIntent = new Intent(ctxt, AutobotBroadcastReceiver.class);
             newIntent.putIntegerArrayListExtra(AutobotBroadcastReceiver.AUTO_POLL_LIST, selectedIdList);
@@ -62,29 +62,34 @@ public class AutobotBroadcastReceiver extends WakefulBroadcastReceiver {
         }
     }
 
-    public static void scheduleAlarms(Context ctxt , Intent intent) {
+    public static void scheduleAlarms(Context ctxt, Intent intent) {
 
-        //cancelAlarms(ctxt, intent);
+        //cancelAlarms(ctxt , intent);
 
-        AlarmManager mgr=
-                (AlarmManager)ctxt.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager mgr =
+                (AlarmManager) ctxt.getSystemService(Context.ALARM_SERVICE);
 
-        PendingIntent pi = PendingIntent.getBroadcast(ctxt, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pi = getPendingIntent(ctxt, intent);
 
-        mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() + INITIAL_DELAY,
-                PERIOD, pi);
+        mgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() +
+                        PERIOD, pi);
 
-        Toast.makeText(ctxt, "New Auto Bid set", Toast.LENGTH_LONG).show();
+        Toast.makeText(ctxt, "New Auto Bid set", Toast.LENGTH_SHORT).show();
 
     }
 
-    public static void cancelAlarms(Context ctxt , Intent intent) {
-        AlarmManager mgr=
-                (AlarmManager)ctxt.getSystemService(Context.ALARM_SERVICE);
+    private static void cancelAlarms(Context ctxt, Intent intent) {
 
-        PendingIntent pi = PendingIntent.getBroadcast(ctxt, 0, intent, PendingIntent.FLAG_NO_CREATE);
-        mgr.cancel(pi);
+        AlarmManager mgr =
+                (AlarmManager) ctxt.getSystemService(Context.ALARM_SERVICE);
 
+        mgr.cancel(getPendingIntent(ctxt, intent));
+
+    }
+
+    private static PendingIntent getPendingIntent(Context ctxt, Intent intent) {
+
+        return PendingIntent.getBroadcast(ctxt, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 }
